@@ -68,7 +68,7 @@ export default function QuestionDisplay({
   };
 
   return (
-    <div className='space-y-4 m-4'>
+    <div className='space-y-4 m-4 '>
       <h2 className='text-xl font-semibold'>{question.question}</h2>
       <ul className='space-y-2'>
         {question.choices.map((choice, index) => {
@@ -117,13 +117,13 @@ export default function QuestionDisplay({
           <div className='w-full flex justify-between mt-4'>
             <button
               onClick={handleBack}
-              className='bg-gray-300 hover:bg-gray-400 px-4 py-3 rounded-lg shadow transition'
+              className='bg-gray-300 hover:bg-gray-400 px-4 py-3 rounded-lg shadow transition cursor-pointer'
             >
               分野選択へ
             </button>
             <button
               onClick={handleNext}
-              className='bg-blue-400 hover:bg-blue-500 text-white px-4 py-3 rounded-lg shadow transition'
+              className='bg-blue-400 hover:bg-blue-500 text-white px-4 py-3 rounded-lg shadow transition cursor-pointer'
             >
               次の問題へ
             </button>
@@ -134,7 +134,7 @@ export default function QuestionDisplay({
           <div className='mt-4'>
             <button
               onClick={handleBack}
-              className='bg-gray-300 hover:bg-gray-400 px-4 py-3 rounded-lg shadow transition'
+              className='bg-gray-300 hover:bg-gray-400 px-4 py-3 rounded-lg shadow transition cursor-pointer'
             >
               分野選択へ
             </button>

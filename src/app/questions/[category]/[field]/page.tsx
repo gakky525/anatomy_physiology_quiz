@@ -41,7 +41,7 @@ export default async function QuestionPage({ params }: Params) {
   }
 
   return (
-    <main className='p-4 space-y-6'>
+    <main className='p-4 space-y-6 max-w-3xl mx-auto'>
       <h1 className='text-3xl font-bold text-center'>
         <span className='inline-flex items-center gap-4'>
           <span
