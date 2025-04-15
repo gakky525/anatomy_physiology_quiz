@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     title: '解剖学・生理学 スキマ時間にできる国試対策アプリ',
     description:
       'スキマ時間にできる国家試験対策。全分野ランダム出題や苦手克服に最適。',
-    url: 'process.env.NEXT_PUBLIC_SITE_URL',
+    url: `${process.env.NEXT_PUBLIC_SITE_URL}`,
     siteName: '解剖学・生理学 スキマ時間にできる国試対策',
     images: [
       {
