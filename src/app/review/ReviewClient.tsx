@@ -38,7 +38,7 @@ export default function ReviewPage() {
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed)) {
-          setQuestions([...parsed].reverse());
+          setQuestions(parsed);
         }
       }
     } catch (error) {
@@ -61,14 +61,13 @@ export default function ReviewPage() {
   };
 
   const handleDeleteAll = () => {
-    setQuestions([]); // 状態をリセット
+    setQuestions([]);
     localStorage.removeItem('incorrectQuestions');
-    setOpenAllDelete(false); // モーダルを閉じる
+    setOpenAllDelete(false);
   };
 
   return (
     <main className='p-6 relative max-w-screen-md mx-auto'>
-      {/* トップページに戻るボタン (左上) */}
       <Link
         href='/'
         className='absolute top-6 left-6 inline-block bg-gray-300 hover:bg-gray-400 py-2 px-4 rounded-2xl'
@@ -76,17 +75,38 @@ export default function ReviewPage() {
         トップへ
       </Link>
 
-      {/* 全て削除するボタン (右上) */}
       {questions.length > 0 && (
         <Button
           className='absolute top-6 right-6 bg-red-500 hover:bg-red-600 text-white rounded-2xl cursor-pointer'
-          onClick={() => setOpenAllDelete(true)} // 全て削除モーダルを開く
+          onClick={() => setOpenAllDelete(true)}
         >
           全削除
         </Button>
       )}
 
-      <h1 className='text-3xl mb-4 mt-12 font-semibold text-center'>復習</h1>
+      <h1 className='text-3xl mb-3 mt-12 font-semibold text-center'>復習</h1>
+      <h2
+        className={`mb-1 text-lg text-center font-medium ${
+          questions.length >= 100 ? 'text-red-500' : 'text-gray-600'
+        }`}
+      >
+        現在の復習リストの問題数：{questions.length}/100問
+      </h2>
+
+      <div className='mb-3 mx-auto w-full max-w-sm h-2 bg-gray-200 rounded-full overflow-hidden'>
+        <div
+          className={`h-full transition-all duration-300 ${
+            questions.length >= 100 ? 'bg-red-500' : 'bg-green-500'
+          }`}
+          style={{ width: `${(questions.length / 100) * 100}%` }}
+        />
+      </div>
+
+      {questions.length >= 100 && (
+        <p className='text-sm text-red-500 text-center m-2'>
+          ⚠ 保存容量が上限に達しています（古いものから順に削除されます）
+        </p>
+      )}
 
       {questions.length === 0 ? (
         <p className='text-center text-xl p-8'>
@@ -99,7 +119,6 @@ export default function ReviewPage() {
               key={q.id}
               className='relative border p-4 rounded-lg shadow-sm bg-gray-50'
             >
-              {/* 削除アイコン */}
               <Button
                 variant='ghost'
                 title='この問題を削除'
@@ -130,7 +149,6 @@ export default function ReviewPage() {
         </ul>
       )}
 
-      {/* モーダル: 単一削除確認 */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className='rounded-xl shadow-lg bg-gray-50 max-w-sm mx-auto'>
           <DialogHeader>
@@ -142,7 +160,6 @@ export default function ReviewPage() {
             </DialogDescription>
           </DialogHeader>
 
-          {/* 中央寄せにカスタム */}
           <div className='flex justify-center gap-4 mt-4'>
             <Button
               variant='outline'
@@ -161,7 +178,6 @@ export default function ReviewPage() {
         </DialogContent>
       </Dialog>
 
-      {/* モーダル: 全て削除確認 */}
       <Dialog open={openAllDelete} onOpenChange={setOpenAllDelete}>
         <DialogContent className='rounded-xl shadow-lg bg-gray-50 max-w-sm mx-auto'>
           <DialogHeader>
@@ -173,7 +189,6 @@ export default function ReviewPage() {
             </DialogDescription>
           </DialogHeader>
 
-          {/* 中央寄せにカスタム */}
           <div className='flex justify-center gap-4 mt-4'>
             <Button
               variant='outline'

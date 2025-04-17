@@ -25,6 +25,5 @@ export async function getRandomQuestion(category: string, field: string) {
     skip,
     include: { choices: true },
   });
-
   return question;
 }

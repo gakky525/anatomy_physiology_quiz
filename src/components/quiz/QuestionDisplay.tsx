@@ -27,19 +27,22 @@ export default function QuestionDisplay({
 }) {
   const router = useRouter();
   const [selected, setSelected] = useState<number | null>(null);
+  const [showLimitNotice, setShowLimitNotice] = useState(false);
 
   const saveIncorrectQuestion = (question: Question) => {
     if (typeof window === 'undefined') return;
-    const existing = JSON.parse(
+    const existing: Question[] = JSON.parse(
       localStorage.getItem('incorrectQuestions') || '[]'
     );
-    const exists = existing.some((q: Question) => q.id === question.id);
-    if (!exists) {
-      localStorage.setItem(
-        'incorrectQuestions',
-        JSON.stringify([...existing, question])
-      );
+    // 既に存在する場合は削除して先頭に追加
+    const filtered = existing.filter((q) => q.id !== question.id);
+    const updated = [question, ...filtered];
+    if (updated.length > 100) {
+      updated.pop(); // 最後の1件を削除（古いもの）
+      setShowLimitNotice(true); // 通知表示
+      setTimeout(() => setShowLimitNotice(false), 5000);
     }
+    localStorage.setItem('incorrectQuestions', JSON.stringify(updated));
   };
 
   const selectedChoice = question.choices.find((c) => c.id === selected);
@@ -60,7 +63,7 @@ export default function QuestionDisplay({
 
   const handleNext = () => {
     router.refresh();
-    setSelected(null); // 念のため初期化（安全）
+    setSelected(null);
   };
 
   const handleBack = () => {
@@ -68,8 +71,15 @@ export default function QuestionDisplay({
   };
 
   return (
-    <div className='space-y-4 m-4 '>
+    <div className='space-y-4 m-4 relative'>
+      {showLimitNotice && (
+        <div className='fixed top-4 left-1/2 transform -translate-x-1/2 bg-yellow-100 text-yellow-800 border border-yellow-400 px-4 py-2 rounded shadow z-50 transition'>
+          復習リストの保存上限に達したため、古い問題を削除して保存しました。
+        </div>
+      )}
+
       <h2 className='text-xl font-semibold'>{question.question}</h2>
+
       <ul className='space-y-2'>
         {question.choices.map((choice, index) => {
           const isSelected = selected === choice.id;
@@ -112,8 +122,9 @@ export default function QuestionDisplay({
           </div>
         </div>
       )}
+
       <div className='flex gap-4'>
-        {selected !== null && (
+        {selected !== null ? (
           <div className='w-full flex justify-between mt-4'>
             <button
               onClick={handleBack}
@@ -128,9 +139,7 @@ export default function QuestionDisplay({
               次の問題へ
             </button>
           </div>
-        )}
-
-        {selected === null && (
+        ) : (
           <div className='mt-4'>
             <button
               onClick={handleBack}
