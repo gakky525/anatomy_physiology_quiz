@@ -84,19 +84,12 @@ export default function ReviewPage() {
         </Button>
       )}
 
-      <h1 className='text-xl mt-14 font-semibold text-center'>
+      <h1 className='text-2xl mt-14 font-semibold text-center'>
         最近間違えた問題
       </h1>
-      {/* <p
-        className={`m-2 text-md text-center font-medium ${
-          questions.length >= 100 ? 'text-red-500' : 'text-gray-600'
-        }`}
-      >
-        現在保存されている問題数(最大100問)：{questions.length}/100問
-      </p> */}
       <div
         className={`m-2 text-md text-center font-medium ${
-          questions.length >= 100 ? 'text-red-500' : 'text-gray-600'
+          questions.length >= 100 ? 'text-red-500' : 'text-gray-700'
         }`}
       >
         <p>現在保存されている問題数 (最大100問)</p>
