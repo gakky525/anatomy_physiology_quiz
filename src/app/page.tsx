@@ -9,7 +9,7 @@ export default function Home() {
       </h1>
       <h2 className='mt-2 text-3xl font-bold'>スキマ時間にできる国試対策</h2>
       <div className='flex flex-col items-center gap-4'>
-        <p className='m-4 text-xl'>学習したい項目を選択してください</p>
+        <p className='m-4 text-md'>学習したい項目を選択してください</p>
         <div className='flex flex-col sm:flex-row gap-6 sm:gap-12'>
           <Link
             href='/subjects/anatomy'

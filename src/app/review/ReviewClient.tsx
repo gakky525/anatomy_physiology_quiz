@@ -104,7 +104,7 @@ export default function ReviewPage() {
 
       {questions.length >= 100 && (
         <p className='text-sm text-red-500 text-center m-2'>
-          ⚠ 保存容量が上限に達しています（古いものから順に削除されます）
+          ⚠ 保存上限に達しています（古いものから順に削除されます）
         </p>
       )}
 

@@ -1,4 +1,3 @@
-// src/lib/quiz/getRandomQuestion.ts
 import { prisma } from '@/lib/prisma';
 import { Category } from '@prisma/client';
 
