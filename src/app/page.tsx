@@ -26,7 +26,7 @@ export default function Home() {
         </div>
         <Link
           href='/review'
-          className='bg-amber-200 hover:bg-amber-300 text-lg mt-6 mb-8 px-6 py-4 rounded-xl shadow-md'
+          className='bg-amber-200 hover:bg-amber-300 text-lg m-6 px-6 py-4 rounded-xl shadow-md'
         >
           復習する
         </Link>

@@ -82,7 +82,7 @@ export default async function SubjectPage({ params }: Params) {
 
       <Link
         href='/'
-        className='mt-8 bg-gray-300 hover:bg-gray-400 px-4 py-3 rounded-lg shadow transition'
+        className='m-6 bg-gray-300 hover:bg-gray-400 px-4 py-3 rounded-lg shadow transition'
       >
         トップに戻る
       </Link>
