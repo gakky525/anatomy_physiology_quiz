@@ -84,14 +84,24 @@ export default function ReviewPage() {
         </Button>
       )}
 
-      <h1 className='text-3xl mb-3 mt-12 font-semibold text-center'>復習</h1>
-      <h2
-        className={`mb-1 text-lg text-center font-medium ${
+      <h1 className='text-xl mt-14 font-semibold text-center'>
+        最近間違えた問題
+      </h1>
+      {/* <p
+        className={`m-2 text-md text-center font-medium ${
           questions.length >= 100 ? 'text-red-500' : 'text-gray-600'
         }`}
       >
-        現在の復習リストの問題数：{questions.length}/100問
-      </h2>
+        現在保存されている問題数(最大100問)：{questions.length}/100問
+      </p> */}
+      <div
+        className={`m-2 text-md text-center font-medium ${
+          questions.length >= 100 ? 'text-red-500' : 'text-gray-600'
+        }`}
+      >
+        <p>現在保存されている問題数 (最大100問)</p>
+        <p>{questions.length} / 100問</p>
+      </div>
 
       <div className='mb-3 mx-auto w-full max-w-sm h-2 bg-gray-200 rounded-full overflow-hidden'>
         <div
@@ -104,7 +114,7 @@ export default function ReviewPage() {
 
       {questions.length >= 100 && (
         <p className='text-sm text-red-500 text-center m-2'>
-          ⚠ 保存上限に達しています（古いものから順に削除されます）
+          保存上限に達しています。古いものから順に削除されます。
         </p>
       )}
 
