@@ -150,7 +150,7 @@ export default function ReviewPage() {
       )}
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className='rounded-xl shadow-lg bg-gray-50 max-w-sm mx-auto'>
+        <DialogContent className='rounded-xl shadow-lg bg-gray-50 w-[80%] sm:max-w-sm mx-auto'>
           <DialogHeader>
             <DialogTitle className='text-center text-lg font-bold'>
               本当に削除しますか？
@@ -179,7 +179,7 @@ export default function ReviewPage() {
       </Dialog>
 
       <Dialog open={openAllDelete} onOpenChange={setOpenAllDelete}>
-        <DialogContent className='rounded-xl shadow-lg bg-gray-50 max-w-sm mx-auto'>
+        <DialogContent className='rounded-xl shadow-lg bg-gray-50 w-[80%] sm:max-w-sm mx-auto'>
           <DialogHeader>
             <DialogTitle className='text-center text-lg font-bold'>
               本当にすべて削除しますか？
