@@ -3,13 +3,13 @@ import Link from 'next/link';
 export default function Home() {
   return (
     <main className='flex flex-col items-center justify-center min-h-screen gap-6 p-8'>
-      <h1 className='text-4xl font-bold flex gap-12'>
+      <h1 className='text-4xl font-bold flex gap-10'>
         <span className='text-red-500'>解剖学</span>
         <span className='text-green-600'>生理学</span>
       </h1>
-      <h2 className='mt-2 text-3xl font-bold'>スキマ時間にできる国試対策</h2>
+      <h2 className='mt-2 text-2xl font-bold'>スキマ時間にできる国試対策</h2>
       <div className='flex flex-col items-center gap-4'>
-        <p className='m-4 text-md'>学習したい項目を選択してください</p>
+        <p className='m-2 text-lg'>学習したい項目を選択してください</p>
         <div className='flex flex-col sm:flex-row gap-6 sm:gap-12'>
           <Link
             href='/subjects/anatomy'
@@ -26,7 +26,7 @@ export default function Home() {
         </div>
         <Link
           href='/review'
-          className='bg-amber-200 hover:bg-amber-300 text-lg mt-8 px-6 py-4 rounded-xl shadow-md'
+          className='bg-amber-200 hover:bg-amber-300 text-lg mt-6 mb-8 px-6 py-4 rounded-xl shadow-md'
         >
           復習する
         </Link>
