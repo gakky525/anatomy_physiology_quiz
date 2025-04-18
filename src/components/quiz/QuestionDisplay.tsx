@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 type Choice = {
   id: number;
@@ -28,20 +28,32 @@ export default function QuestionDisplay({
   const router = useRouter();
   const [selected, setSelected] = useState<number | null>(null);
   const [showLimitNotice, setShowLimitNotice] = useState(false);
+  const hasShownNoticeRef = useRef(false);
 
   const saveIncorrectQuestion = (question: Question) => {
     if (typeof window === 'undefined') return;
+
     const existing: Question[] = JSON.parse(
       localStorage.getItem('incorrectQuestions') || '[]'
     );
-    // 既に存在する場合は削除して先頭に追加
+
     const filtered = existing.filter((q) => q.id !== question.id);
     const updated = [question, ...filtered];
-    if (updated.length > 100) {
-      updated.pop(); // 最後の1件を削除（古いもの）
-      setShowLimitNotice(true); // 通知表示
-      setTimeout(() => setShowLimitNotice(false), 5000);
+
+    const isOverLimit = updated.length > 100;
+
+    if (isOverLimit) {
+      updated.pop();
+
+      if (!hasShownNoticeRef.current) {
+        setShowLimitNotice(true);
+        hasShownNoticeRef.current = true; // 一度だけ表示するように記録
+        setTimeout(() => {
+          setShowLimitNotice(false);
+        }, 5000);
+      }
     }
+
     localStorage.setItem('incorrectQuestions', JSON.stringify(updated));
   };
 
