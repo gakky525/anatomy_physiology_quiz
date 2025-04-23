@@ -4,9 +4,9 @@ import { Category } from '@prisma/client';
 
 export async function POST(req: Request) {
   const { category, field } = await req.json();
-
   const decodedField = decodeURIComponent(field);
 
+  // バリデーション
   if (
     !category ||
     typeof category !== 'string' ||
@@ -34,19 +34,25 @@ export async function POST(req: Request) {
       : {}),
   };
 
-  const total = await prisma.question.count({ where: whereCondition });
+  // 該当するIDだけ取得
+  const ids = await prisma.question.findMany({
+    where: whereCondition,
+    select: { id: true },
+  });
 
-  if (total === 0) {
+  if (ids.length === 0) {
     console.log('❗️ No matching questions found');
     return NextResponse.json(null);
   }
 
-  const randomQuestion = await prisma.question.findMany({
-    where: whereCondition,
+  // ランダムな ID を選択してその問題を取得
+  const randomIndex = Math.floor(Math.random() * ids.length);
+  const randomId = ids[randomIndex].id;
+
+  const randomQuestion = await prisma.question.findUnique({
+    where: { id: randomId },
     include: { choices: true },
-    skip: Math.floor(Math.random() * total),
-    take: 1,
   });
 
-  return NextResponse.json(randomQuestion[0]);
+  return NextResponse.json(randomQuestion);
 }
