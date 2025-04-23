@@ -3,31 +3,35 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* body {
-  background-color: #fdf6e3;
-} */
+.slide-out-left {
+  animation: slideOutLeft 0.4s forwards;
+}
 
-/* .btn {
-  display: block;
-  width: 100%;
-  max-width: 300px;
-  padding: 12px;
-  font-size: 16px;
-  text-align: center;
-  border-radius: 8px;
-  background-color: #0070f3;
-  color: white;
-  transition: background 0.3s;
-} */
+.slide-in-right {
+  animation: slideInRight 0.4s forwards;
+}
 
-/* .btn:hover {
-  background-color: #005bb5;
-} */
+@keyframes slideOutLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
 
-/* .btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-} */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+}
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);

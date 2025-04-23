@@ -28,6 +28,9 @@ export default function QuestionDisplay({
   const router = useRouter();
   const [selected, setSelected] = useState<number | null>(null);
   const [showLimitNotice, setShowLimitNotice] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [animationClass, setAnimationClass] = useState('');
+
   const hasShownNoticeRef = useRef(false);
 
   const saveIncorrectQuestion = (question: Question) => {
@@ -74,8 +77,21 @@ export default function QuestionDisplay({
   };
 
   const handleNext = () => {
-    router.refresh();
+    if (isAnimating) return;
+
     setSelected(null);
+    setAnimationClass('slide-out-left');
+    setIsAnimating(true);
+
+    setTimeout(() => {
+      router.refresh();
+      setAnimationClass('slide-in-right');
+
+      setTimeout(() => {
+        setIsAnimating(false);
+        setAnimationClass('');
+      }, 400);
+    }, 400);
   };
 
   const handleBack = () => {
@@ -83,7 +99,7 @@ export default function QuestionDisplay({
   };
 
   return (
-    <div className='space-y-4 m-4 relative'>
+    <div className={`space-y-4 m-4 relative ${animationClass}`}>
       {showLimitNotice && (
         <div className='fixed top-4 left-1/2 transform -translate-x-1/2 bg-yellow-100 text-yellow-800 border border-yellow-400 px-4 py-2 rounded shadow z-50 transition'>
           復習リストの保存上限に達したため、古い問題を削除して保存しました。
