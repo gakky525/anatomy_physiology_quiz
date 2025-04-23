@@ -56,11 +56,7 @@ export default async function QuestionPage({ params }: Params) {
           {fieldLabel}
         </span>
       </h1>
-      <QuestionDisplay
-        question={question}
-        // field={decodedField}
-        category={category}
-      />
+      <QuestionDisplay question={question} category={category} field={field} />
     </main>
   );
 }

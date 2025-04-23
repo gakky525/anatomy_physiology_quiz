@@ -19,20 +19,20 @@ export default function GlobalError({
     <div className='flex flex-col items-center justify-center min-h-screen space-y-4 px-4 text-center'>
       <h1 className='text-3xl font-bold text-red-500'>エラーが発生しました</h1>
       <p className='text-lg'>
-        申し訳ありません。ページの表示中に予期しないエラーが発生しました。
+        申し訳ありません。読み込み中に予期しないエラーが発生しました。
       </p>
-      <div className='flex gap-4 mt-4'>
+      <div className='flex gap-8 mt-4'>
         <button
           onClick={() => reset()}
-          className='bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full shadow transition'
+          className='bg-blue-500 hover:bg-blue-600 text-white px-6 py-4 rounded-full shadow transition cursor-pointer'
         >
           もう一度試す
         </button>
         <Link
           href='/'
-          className='bg-gray-300 hover:bg-gray-400 px-6 py-3 rounded-full shadow transition'
+          className='bg-gray-300 hover:bg-gray-400 px-6 py-4 rounded-full shadow transition'
         >
-          トップページへ戻る
+          トップへ戻る
         </Link>
       </div>
     </div>

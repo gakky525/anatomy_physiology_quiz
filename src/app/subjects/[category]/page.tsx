@@ -11,7 +11,7 @@ const subjects = {
     '消化器',
     '泌尿器',
     '生殖器',
-    'new',
+    // 'new',
   ],
   physiology: [
     '血液・免疫',

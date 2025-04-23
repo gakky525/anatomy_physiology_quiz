@@ -5,6 +5,9 @@ import { Category } from '@prisma/client';
 export async function POST(req: Request) {
   const { category, field } = await req.json();
 
+  const decodedField = decodeURIComponent(field); // URLデコード
+  // console.log('Decoded field:', decodedField);
+
   if (
     !category ||
     typeof category !== 'string' ||
@@ -27,16 +30,21 @@ export async function POST(req: Request) {
 
   const whereCondition = {
     category: categoryEnum,
-    ...(field !== 'all' ? { field } : {}),
+    ...(decodedField !== 'all' && decodedField !== ''
+      ? { field: decodedField }
+      : {}),
   };
 
-  // 該当するIDだけ取得
+  // where 条件を確認
+  console.log('Where condition:', whereCondition);
+
   const ids = await prisma.question.findMany({
     where: whereCondition,
     select: { id: true },
   });
 
   if (ids.length === 0) {
+    console.log('❗️ No matching questions found');
     return NextResponse.json(null);
   }
 
