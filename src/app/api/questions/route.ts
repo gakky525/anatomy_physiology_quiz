@@ -5,8 +5,7 @@ import { Category } from '@prisma/client';
 export async function POST(req: Request) {
   const { category, field } = await req.json();
 
-  const decodedField = decodeURIComponent(field); // URLデコード
-  // console.log('Decoded field:', decodedField);
+  const decodedField = decodeURIComponent(field);
 
   if (
     !category ||
@@ -35,25 +34,19 @@ export async function POST(req: Request) {
       : {}),
   };
 
-  // where 条件を確認
-  console.log('Where condition:', whereCondition);
+  const total = await prisma.question.count({ where: whereCondition });
 
-  const ids = await prisma.question.findMany({
-    where: whereCondition,
-    select: { id: true },
-  });
-
-  if (ids.length === 0) {
+  if (total === 0) {
     console.log('❗️ No matching questions found');
     return NextResponse.json(null);
   }
 
-  const randomId = ids[Math.floor(Math.random() * ids.length)]?.id;
-
-  const randomQuestion = await prisma.question.findUnique({
-    where: { id: randomId },
+  const randomQuestion = await prisma.question.findMany({
+    where: whereCondition,
     include: { choices: true },
+    skip: Math.floor(Math.random() * total),
+    take: 1,
   });
 
-  return NextResponse.json(randomQuestion);
+  return NextResponse.json(randomQuestion[0]);
 }

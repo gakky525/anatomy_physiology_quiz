@@ -1,14 +1,12 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-/* @custom-variant dark (&:is(.dark *)); */
-
 .slide-out-left {
-  animation: slideOutLeft 0.8s forwards;
+  animation: slideOutLeft 0.6s forwards;
 }
 
 .slide-in-right {
-  animation: slideInRight 0.8s forwards;
+  animation: slideInRight 0.6s forwards;
 }
 
 @keyframes slideOutLeft {
