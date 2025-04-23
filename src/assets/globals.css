@@ -4,11 +4,11 @@
 @custom-variant dark (&:is(.dark *));
 
 .slide-out-left {
-  animation: slideOutLeft 0.8s forwards;
+  animation: slideOutLeft 1s forwards;
 }
 
 .slide-in-right {
-  animation: slideInRight 0.8s forwards;
+  animation: slideInRight 1s forwards;
 }
 
 @keyframes slideOutLeft {
