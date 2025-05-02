@@ -8,26 +8,23 @@ export async function getRandomQuestion(category: string, field: string) {
     throw new Error(`Invalid category: ${category}`);
   }
 
-  const validCategory = upperCategory as Category;
-
   const whereCondition = {
-    category: validCategory,
+    category: upperCategory as Category,
     ...(field !== 'all' ? { field: decodeURIComponent(field) } : {}),
   };
 
-  const ids = await prisma.question.findMany({
+  const total = await prisma.question.count({ where: whereCondition });
+
+  if (total === 0) return null;
+
+  const randomSkip = Math.floor(Math.random() * total);
+
+  const [question] = await prisma.question.findMany({
     where: whereCondition,
-    select: { id: true },
-  });
-
-  if (ids.length === 0) return null;
-
-  const randomId = ids[Math.floor(Math.random() * ids.length)]?.id;
-
-  const question = await prisma.question.findUnique({
-    where: { id: randomId },
     include: { choices: true },
+    skip: randomSkip,
+    take: 1,
   });
 
-  return question;
+  return question ?? null;
 }

@@ -34,25 +34,23 @@ export async function POST(req: Request) {
       : {}),
   };
 
-  // 該当するIDだけ取得
-  const ids = await prisma.question.findMany({
-    where: whereCondition,
-    select: { id: true },
-  });
+  // 件数取得
+  const total = await prisma.question.count({ where: whereCondition });
 
-  if (ids.length === 0) {
+  if (total === 0) {
     console.log('❗️ No matching questions found');
     return NextResponse.json(null);
   }
 
-  // ランダムな ID を選択してその問題を取得
-  const randomIndex = Math.floor(Math.random() * ids.length);
-  const randomId = ids[randomIndex].id;
+  // ランダムに1件取得
+  const randomSkip = Math.floor(Math.random() * total);
 
-  const randomQuestion = await prisma.question.findUnique({
-    where: { id: randomId },
+  const [randomQuestion] = await prisma.question.findMany({
+    where: whereCondition,
     include: { choices: true },
+    skip: randomSkip,
+    take: 1,
   });
 
-  return NextResponse.json(randomQuestion);
+  return NextResponse.json(randomQuestion ?? null);
 }
