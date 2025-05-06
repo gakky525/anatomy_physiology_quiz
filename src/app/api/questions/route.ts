@@ -40,28 +40,14 @@ export async function POST(req: Request) {
     ...(field !== 'all' && field !== '' ? { field } : {}),
   };
 
-  const ids = await prisma.question.findMany({
+  const [randomQuestion] = await prisma.question.findMany({
     where: whereCondition,
-    select: { id: true },
-  });
-
-  if (ids.length === 0) {
-    console.warn('❗️ No matching questions found');
-    return NextResponse.json(null);
-  }
-
-  const randomId = ids[Math.floor(Math.random() * ids.length)]?.id;
-
-  if (!randomId) {
-    return NextResponse.json(
-      { error: 'Failed to select a random question' },
-      { status: 500 }
-    );
-  }
-
-  const randomQuestion = await prisma.question.findUnique({
-    where: { id: randomId },
     include: { choices: true },
+    orderBy: { id: 'asc' },
+    take: 1,
+    skip: Math.floor(
+      Math.random() * (await prisma.question.count({ where: whereCondition }))
+    ),
   });
 
   return NextResponse.json(randomQuestion ?? null);

@@ -28,12 +28,23 @@ export default function QuestionDisplay({
 }) {
   const router = useRouter();
   const [question, setQuestion] = useState<Question | null>(initialQuestion);
+  const [nextQuestion, setNextQuestion] = useState<Question | null>(null);
   const [selected, setSelected] = useState<number | null>(null);
   const [showLimitNotice, setShowLimitNotice] = useState(false);
   const [animationState, setAnimationState] = useState<
     'idle' | 'exit' | 'enter'
   >('idle');
   const hasShownNoticeRef = useRef(false);
+
+  const selectedChoice =
+    question && Array.isArray(question.choices)
+      ? question.choices.find((c) => c.id === selected)
+      : undefined;
+  const isCorrect = selectedChoice?.isCorrect;
+  const correctChoice =
+    question && Array.isArray(question.choices)
+      ? question.choices.find((c) => c.isCorrect)
+      : undefined;
 
   const saveIncorrectQuestion = (q: Question) => {
     const existing: Question[] = JSON.parse(
@@ -54,17 +65,6 @@ export default function QuestionDisplay({
     localStorage.setItem('incorrectQuestions', JSON.stringify(updated));
   };
 
-  const selectedChoice =
-    question && Array.isArray(question.choices)
-      ? question.choices.find((c) => c.id === selected)
-      : undefined;
-
-  const isCorrect = selectedChoice?.isCorrect;
-  const correctChoice =
-    question && Array.isArray(question.choices)
-      ? question.choices.find((c) => c.isCorrect)
-      : undefined;
-
   useEffect(() => {
     if (
       selected !== null &&
@@ -76,18 +76,8 @@ export default function QuestionDisplay({
     }
   }, [selected, selectedChoice, question]);
 
-  const handleSelect = (id: number) => {
-    if (selected === null) setSelected(id);
-  };
-
-  const handleBack = () => {
-    router.push(`/subjects/${category}`);
-  };
-
-  const handleNext = async () => {
-    setAnimationState('exit');
-
-    setTimeout(async () => {
+  useEffect(() => {
+    const fetchNextQuestion = async () => {
       try {
         const res = await fetch('/api/questions', {
           method: 'POST',
@@ -99,32 +89,64 @@ export default function QuestionDisplay({
           cache: 'no-store',
         });
 
-        if (!res.ok) {
-          console.error('API error', await res.text());
-          setQuestion(null);
-          setAnimationState('idle');
-          return;
-        }
-
         const data = await res.json();
-
-        if (!data || typeof data !== 'object' || !Array.isArray(data.choices)) {
-          console.warn('Invalid question data:', data);
-          setQuestion(null);
-          setAnimationState('idle');
-          return;
+        if (data && Array.isArray(data.choices)) {
+          setNextQuestion(data);
+        } else {
+          setNextQuestion(null);
         }
-
-        setQuestion(data);
-        setSelected(null);
-        setAnimationState('enter');
-
-        setTimeout(() => setAnimationState('idle'), 300);
-      } catch (error) {
-        console.error('Fetch failed', error);
-        setQuestion(null);
-        setAnimationState('idle');
+      } catch (err) {
+        console.error('Prefetch failed:', err);
+        setNextQuestion(null);
       }
+    };
+
+    fetchNextQuestion();
+  }, [question, category, field]);
+
+  const handleSelect = (id: number) => {
+    if (selected === null) setSelected(id);
+  };
+
+  const handleBack = () => {
+    router.push(`/subjects/${category}`);
+  };
+
+  const handleNext = async () => {
+    if (!nextQuestion) {
+      console.warn('Next question not ready');
+      return;
+    }
+
+    setAnimationState('exit');
+
+    setTimeout(() => {
+      setQuestion(nextQuestion);
+      setSelected(null);
+      setAnimationState('enter');
+      setTimeout(() => setAnimationState('idle'), 300);
+
+      fetch('/api/questions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          category: category.toUpperCase(),
+          field,
+        }),
+        cache: 'no-store',
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data && Array.isArray(data.choices)) {
+            setNextQuestion(data);
+          } else {
+            setNextQuestion(null);
+          }
+        })
+        .catch((err) => {
+          console.error('Next-next prefetch failed:', err);
+          setNextQuestion(null);
+        });
     }, 300);
   };
 
