@@ -1,29 +1,54 @@
 import { getRandomQuestion } from '@/lib/quiz/getRandomQuestion';
 import QuestionDisplay from '@/components/quiz/QuestionDisplay';
 import Link from 'next/link';
+import type { Metadata, ResolvingMetadata } from 'next';
 
-type Params = {
+export const dynamic = 'force-dynamic';
+
+type Props = {
   params: Promise<{ category: string; field: string }>;
 };
 
-export async function generateMetadata({ params }: Params) {
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
   const { category, field } = await params;
   const categoryLabel = category === 'anatomy' ? '解剖学' : '生理学';
   const decodedField = decodeURIComponent(field);
   const fieldLabel = decodedField === 'all' ? '全分野' : decodedField;
+  const pageUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/questions/${category}/${field}`;
+  const previousImages = (await parent).openGraph?.images || [];
+
   return {
     title: `${categoryLabel} - ${fieldLabel} | 国試対策アプリ`,
     description: `${categoryLabel}/${fieldLabel}の問題をランダムに出題。国家試験対策に役立つクイズ形式で学習できます。`,
+    openGraph: {
+      title: `${categoryLabel} - ${fieldLabel} | 国試対策アプリ`,
+      description: `${categoryLabel}/${fieldLabel}の問題をランダムに出題。国家試験対策に役立つクイズ形式で学習できます。`,
+      url: pageUrl,
+      siteName: 'スキマ時間にできる国試対策',
+      images: [
+        `${process.env.NEXT_PUBLIC_SITE_URL}/opengraph-image.png`,
+        ...previousImages,
+      ],
+      locale: 'ja_JP',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${categoryLabel} - ${fieldLabel} | 国試対策アプリ`,
+      description: `${categoryLabel}/${fieldLabel}の問題をランダムに出題。国家試験対策に役立つクイズ形式で学習できます。`,
+      images: [`${process.env.NEXT_PUBLIC_SITE_URL}/opengraph-image.png`],
+    },
   };
 }
 
-export default async function QuestionPage({ params }: Params) {
+export default async function QuestionPage({ params }: Props) {
   const { category, field } = await params;
   const decodedField = decodeURIComponent(field);
-
   const categoryLabel = category === 'anatomy' ? '解剖学' : '生理学';
   const fieldLabel = decodedField === 'all' ? '全分野' : decodedField;
-
   const question = await getRandomQuestion(category, decodedField);
 
   if (!question) {

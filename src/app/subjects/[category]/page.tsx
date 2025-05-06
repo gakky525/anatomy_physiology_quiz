@@ -1,5 +1,49 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import type { Metadata, ResolvingMetadata } from 'next';
+
+type Props = {
+  params: Promise<{ category: string }>;
+};
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { category } = await params;
+  const categoryLabel = category === 'anatomy' ? '解剖学' : '生理学';
+  const pageUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/subjects/${category}`;
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: `${categoryLabel} | スキマ時間にできる国試対策`,
+    description: `${categoryLabel}のページです。スキマ時間を活用して苦手な分野を克服しましょう。`,
+    openGraph: {
+      title: `${categoryLabel} | スキマ時間にできる国試対策`,
+      description: `${categoryLabel}のページです。スキマ時間を活用して苦手な分野を克服しましょう。`,
+      url: pageUrl,
+      siteName: 'スキマ時間にできる国試対策',
+      images: [
+        `${process.env.NEXT_PUBLIC_SITE_URL}/opengraph-image.png`,
+        ...previousImages,
+      ],
+      locale: 'ja_JP',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${categoryLabel} | スキマ時間にできる国試対策`,
+      description: `${categoryLabel}のページです。スキマ時間を活用して苦手な分野を克服しましょう。`,
+      images: [`${process.env.NEXT_PUBLIC_SITE_URL}/opengraph-image.png`],
+    },
+  };
+}
+
+export function generateStaticParams() {
+  return [{ category: 'anatomy' }, { category: 'physiology' }];
+}
+
+export const dynamic = 'error';
 
 const subjects = {
   anatomy: [
@@ -21,26 +65,13 @@ const subjects = {
     '生殖',
     '代謝',
     '呼吸',
-    '神経',
-    '筋',
+    // '神経',
+    // '筋',
     // 'new',
   ],
 };
 
-type Params = {
-  params: Promise<{ category: string }>;
-};
-
-export async function generateMetadata({ params }: Params) {
-  const { category } = await params;
-  const categoryLabel = category === 'anatomy' ? '解剖学' : '生理学';
-  return {
-    title: `${categoryLabel} | 国試対策アプリ`,
-    description: `${categoryLabel}のページです。スキマ時間を活用して苦手な分野を克服しましょう。`,
-  };
-}
-
-export default async function SubjectPage({ params }: Params) {
+export default async function SubjectPage({ params }: Props) {
   const { category } = await params;
   const fields = subjects[category as keyof typeof subjects];
 
@@ -65,7 +96,6 @@ export default async function SubjectPage({ params }: Params) {
           全分野から出題
         </Link>
 
-        {/* 各分野のリンク */}
         <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6'>
           {fields.map((field) => (
             <Link

@@ -1,55 +1,67 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { Category } from '@prisma/client';
+import { z } from 'zod';
+
+const QuestionRequestSchema = z.object({
+  category: z.nativeEnum(Category),
+  field: z.string(),
+});
 
 export async function POST(req: Request) {
-  const { category, field } = await req.json();
-  const decodedField = decodeURIComponent(field);
+  const json = await req.json();
 
-  // バリデーション
-  if (
-    !category ||
-    typeof category !== 'string' ||
-    !field ||
-    typeof field !== 'string'
-  ) {
+  let decodedField = '';
+  try {
+    decodedField = decodeURIComponent(json.field || '');
+  } catch {
+    return NextResponse.json(
+      { error: 'Invalid field encoding' },
+      { status: 400 }
+    );
+  }
+
+  const result = QuestionRequestSchema.safeParse({
+    category: json.category,
+    field: decodedField,
+  });
+
+  if (!result.success) {
     return NextResponse.json(
       { error: 'Invalid request body' },
       { status: 400 }
     );
   }
 
-  const upperCategory = category.toUpperCase();
-
-  if (!Object.values(Category).includes(upperCategory as Category)) {
-    return NextResponse.json({ error: 'Invalid category' }, { status: 400 });
-  }
-
-  const categoryEnum = upperCategory as Category;
+  const { category, field } = result.data;
 
   const whereCondition = {
-    category: categoryEnum,
-    ...(decodedField !== 'all' && decodedField !== ''
-      ? { field: decodedField }
-      : {}),
+    category,
+    ...(field !== 'all' && field !== '' ? { field } : {}),
   };
 
-  // 件数取得
-  const total = await prisma.question.count({ where: whereCondition });
+  const ids = await prisma.question.findMany({
+    where: whereCondition,
+    select: { id: true },
+  });
 
-  if (total === 0) {
-    console.log('❗️ No matching questions found');
+  if (ids.length === 0) {
+    console.warn('❗️ No matching questions found');
     return NextResponse.json(null);
   }
 
-  // ランダムに1件取得
-  const randomSkip = Math.floor(Math.random() * total);
+  const randomId = ids[Math.floor(Math.random() * ids.length)]?.id;
 
-  const [randomQuestion] = await prisma.question.findMany({
-    where: whereCondition,
+  if (!randomId) {
+    return NextResponse.json(
+      { error: 'Failed to select a random question' },
+      { status: 500 }
+    );
+  }
+
+  const randomQuestion = await prisma.question.findUnique({
+    where: { id: randomId },
     include: { choices: true },
-    skip: randomSkip,
-    take: 1,
   });
 
   return NextResponse.json(randomQuestion ?? null);

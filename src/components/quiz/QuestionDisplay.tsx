@@ -54,9 +54,16 @@ export default function QuestionDisplay({
     localStorage.setItem('incorrectQuestions', JSON.stringify(updated));
   };
 
-  const selectedChoice = question?.choices.find((c) => c.id === selected);
+  const selectedChoice =
+    question && Array.isArray(question.choices)
+      ? question.choices.find((c) => c.id === selected)
+      : undefined;
+
   const isCorrect = selectedChoice?.isCorrect;
-  const correctChoice = question?.choices.find((c) => c.isCorrect);
+  const correctChoice =
+    question && Array.isArray(question.choices)
+      ? question.choices.find((c) => c.isCorrect)
+      : undefined;
 
   useEffect(() => {
     if (
@@ -79,24 +86,45 @@ export default function QuestionDisplay({
 
   const handleNext = async () => {
     setAnimationState('exit');
-    setTimeout(async () => {
-      const res = await fetch('/api/questions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ category, field }),
-      });
 
-      const data = await res.json();
-      if (!data) {
+    setTimeout(async () => {
+      try {
+        const res = await fetch('/api/questions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            category: category.toUpperCase(),
+            field,
+          }),
+          cache: 'no-store',
+        });
+
+        if (!res.ok) {
+          console.error('API error', await res.text());
+          setQuestion(null);
+          setAnimationState('idle');
+          return;
+        }
+
+        const data = await res.json();
+
+        if (!data || typeof data !== 'object' || !Array.isArray(data.choices)) {
+          console.warn('Invalid question data:', data);
+          setQuestion(null);
+          setAnimationState('idle');
+          return;
+        }
+
+        setQuestion(data);
+        setSelected(null);
+        setAnimationState('enter');
+
+        setTimeout(() => setAnimationState('idle'), 300);
+      } catch (error) {
+        console.error('Fetch failed', error);
         setQuestion(null);
         setAnimationState('idle');
-        return;
       }
-
-      setQuestion(data);
-      setSelected(null);
-      setAnimationState('enter');
-      setTimeout(() => setAnimationState('idle'), 300);
     }, 300);
   };
 
