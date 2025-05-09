@@ -41,6 +41,7 @@ export default function QuestionDisplay({
   const [nextQuestion, setNextQuestion] = useState<Question | null>(null);
   const [selected, setSelected] = useState<number | null>(null);
   const [showLimitNotice, setShowLimitNotice] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const hasShownNoticeRef = useRef(false);
 
   const selectedChoice = question?.choices.find((c) => c.id === selected);
@@ -78,6 +79,8 @@ export default function QuestionDisplay({
   }, [selected, selectedChoice, question]);
 
   useEffect(() => {
+    if (selected === null) return;
+
     const fetchNextQuestion = async () => {
       try {
         const res = await fetch('/api/questions', {
@@ -107,7 +110,7 @@ export default function QuestionDisplay({
     };
 
     fetchNextQuestion();
-  }, [question, category, field]);
+  }, [selected, category, field]);
 
   const handleSelect = (id: number) => {
     if (selected === null) setSelected(id);
@@ -123,11 +126,13 @@ export default function QuestionDisplay({
       return;
     }
 
-    setQuestion(null);
+    setIsTransitioning(true);
     setSelected(null);
+    setQuestion(null);
 
     setTimeout(() => {
       setQuestion(nextQuestion);
+      setIsTransitioning(false);
 
       fetch('/api/questions', {
         method: 'POST',
@@ -153,7 +158,7 @@ export default function QuestionDisplay({
           console.error('Next-next prefetch failed:', err);
           setNextQuestion(null);
         });
-    }, 200);
+    }, 300);
   };
 
   return (
@@ -164,7 +169,7 @@ export default function QuestionDisplay({
         </div>
       )}
 
-      {!question ? (
+      {!question || isTransitioning ? (
         <Placeholder />
       ) : (
         <div>
@@ -222,7 +227,7 @@ export default function QuestionDisplay({
             >
               分野選択へ
             </button>
-            {selected !== null && nextQuestion !== null && (
+            {selected !== null && (
               <button
                 onClick={handleNext}
                 className='bg-blue-400 hover:bg-blue-500 text-white px-4 py-3 rounded-lg shadow'
