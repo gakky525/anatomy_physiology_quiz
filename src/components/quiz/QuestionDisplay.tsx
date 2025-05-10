@@ -78,9 +78,41 @@ export default function QuestionDisplay({
     }
   }, [selected, selectedChoice, question]);
 
-  useEffect(() => {
-    if (selected === null) return;
+  // useEffect(() => {
+  //   if (selected === null) return;
 
+  //   const fetchNextQuestion = async () => {
+  //     try {
+  //       const res = await fetch('/api/questions', {
+  //         method: 'POST',
+  //         headers: { 'Content-Type': 'application/json' },
+  //         body: JSON.stringify({ category: category.toUpperCase(), field }),
+  //         cache: 'no-store',
+  //       });
+
+  //       if (!res.ok) {
+  //         const errorText = await res.text();
+  //         console.error('Failed to fetch next question:', errorText);
+  //         setNextQuestion(null);
+  //         return;
+  //       }
+
+  //       const data = await res.json();
+  //       if (data && Array.isArray(data.choices)) {
+  //         setNextQuestion(data);
+  //       } else {
+  //         setNextQuestion(null);
+  //       }
+  //     } catch (err) {
+  //       console.error('Prefetch failed:', err);
+  //       setNextQuestion(null);
+  //     }
+  //   };
+
+  //   fetchNextQuestion();
+  // }, [selected, category, field]);
+
+  useEffect(() => {
     const fetchNextQuestion = async () => {
       try {
         const res = await fetch('/api/questions', {
@@ -110,7 +142,7 @@ export default function QuestionDisplay({
     };
 
     fetchNextQuestion();
-  }, [selected, category, field]);
+  }, [category, field]);
 
   const handleSelect = (id: number) => {
     if (selected === null) setSelected(id);
@@ -120,20 +152,85 @@ export default function QuestionDisplay({
     router.push(`/subjects/${category}`);
   };
 
+  // const handleNext = async () => {
+  //   setIsTransitioning(true);
+
+  //   if (!nextQuestion) {
+  //     console.warn('Next question not ready');
+  //     setTimeout(() => setIsTransitioning(false), 1000);
+  //     return;
+  //   }
+
+  //   setSelected(null);
+  //   setQuestion(null);
+
+  //   setTimeout(() => {
+  //     setQuestion(nextQuestion);
+  //     setIsTransitioning(false);
+
+  //     fetch('/api/questions', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ category: category.toUpperCase(), field }),
+  //       cache: 'no-store',
+  //     })
+  //       .then(async (res) => {
+  //         if (!res.ok) {
+  //           const errorText = await res.text();
+  //           console.error('Next-next fetch error:', errorText);
+  //           setNextQuestion(null);
+  //           return;
+  //         }
+  //         const data = await res.json();
+  //         if (data && Array.isArray(data.choices)) {
+  //           setNextQuestion(data);
+  //         } else {
+  //           setNextQuestion(null);
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         console.error('Next-next prefetch failed:', err);
+  //         setNextQuestion(null);
+  //       });
+  //   }, 300);
+  // };
+
   const handleNext = async () => {
     setIsTransitioning(true);
-
-    if (!nextQuestion) {
-      console.warn('Next question not ready');
-      setTimeout(() => setIsTransitioning(false), 1000);
-      return;
-    }
-
     setSelected(null);
     setQuestion(null);
 
-    setTimeout(() => {
-      setQuestion(nextQuestion);
+    try {
+      let newQuestion: Question;
+
+      if (nextQuestion) {
+        newQuestion = nextQuestion;
+      } else {
+        const res = await fetch('/api/questions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ category: category.toUpperCase(), field }),
+          cache: 'no-store',
+        });
+
+        if (!res.ok) {
+          const errorText = await res.text();
+          console.error('Failed to fetch next question:', errorText);
+          setIsTransitioning(false);
+          return;
+        }
+
+        const data = await res.json();
+        if (!data || !Array.isArray(data.choices)) {
+          console.error('Invalid data received for next question');
+          setIsTransitioning(false);
+          return;
+        }
+
+        newQuestion = data;
+      }
+
+      setQuestion(newQuestion);
       setIsTransitioning(false);
 
       fetch('/api/questions', {
@@ -160,7 +257,10 @@ export default function QuestionDisplay({
           console.error('Next-next prefetch failed:', err);
           setNextQuestion(null);
         });
-    }, 300);
+    } catch (err) {
+      console.error('handleNext error:', err);
+      setIsTransitioning(false);
+    }
   };
 
   return (
