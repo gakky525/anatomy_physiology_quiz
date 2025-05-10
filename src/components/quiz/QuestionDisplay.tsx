@@ -121,12 +121,14 @@ export default function QuestionDisplay({
   };
 
   const handleNext = async () => {
+    setIsTransitioning(true);
+
     if (!nextQuestion) {
       console.warn('Next question not ready');
+      setTimeout(() => setIsTransitioning(false), 1000);
       return;
     }
 
-    setIsTransitioning(true);
     setSelected(null);
     setQuestion(null);
 
