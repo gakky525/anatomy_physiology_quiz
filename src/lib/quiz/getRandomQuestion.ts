@@ -1,7 +1,11 @@
 import { prisma } from '@/lib/prisma';
 import { Category } from '@prisma/client';
 
-export async function getRandomQuestion(category: string, field: string) {
+export async function getRandomQuestion(
+  category: string,
+  field: string,
+  excludeIds: number[] = []
+) {
   const upperCategory = category.toUpperCase();
 
   if (!Object.values(Category).includes(upperCategory as Category)) {
@@ -11,6 +15,7 @@ export async function getRandomQuestion(category: string, field: string) {
   const whereCondition = {
     category: upperCategory as Category,
     ...(field !== 'all' ? { field: decodeURIComponent(field) } : {}),
+    ...(excludeIds.length > 0 ? { id: { notIn: excludeIds } } : {}),
   };
 
   const ids = await prisma.question.findMany({

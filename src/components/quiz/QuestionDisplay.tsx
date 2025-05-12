@@ -85,7 +85,11 @@ export default function QuestionDisplay({
         const res = await fetch('/api/questions', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ category, field }),
+          body: JSON.stringify({
+            category,
+            field,
+            excludeIds: [initialQuestion.id],
+          }),
           cache: 'no-store',
         });
 
@@ -105,10 +109,11 @@ export default function QuestionDisplay({
     };
 
     prefetch();
-  }, [category, field]);
+  }, [category, field, initialQuestion.id]);
 
   const handleSelect = async (id: number) => {
     if (selected === null) {
+      if (!question) return;
       setSelected(id);
 
       if (isFirstRenderRef.current) {
@@ -120,7 +125,7 @@ export default function QuestionDisplay({
         const res = await fetch('/api/questions', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ category, field }),
+          body: JSON.stringify({ category, field, excludeIds: [question.id] }),
           cache: 'no-store',
         });
 
@@ -161,7 +166,7 @@ export default function QuestionDisplay({
         const res = await fetch('/api/questions', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ category, field }),
+          body: JSON.stringify({ category, field, excludeIds: [question?.id] }),
           cache: 'no-store',
         });
 

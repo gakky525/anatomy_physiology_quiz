@@ -3,7 +3,7 @@ import { getRandomQuestion } from '@/lib/quiz/getRandomQuestion';
 
 export async function POST(req: Request) {
   try {
-    const { category, field } = await req.json();
+    const { category, field, excludeIds } = await req.json();
 
     if (!category || typeof category !== 'string') {
       return NextResponse.json({ error: 'Invalid category' }, { status: 400 });
@@ -13,7 +13,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid field' }, { status: 400 });
     }
 
-    const question = await getRandomQuestion(category, field || 'all');
+    const exclude: number[] = Array.isArray(excludeIds)
+      ? excludeIds.filter((id) => typeof id === 'number')
+      : [];
+
+    const question = await getRandomQuestion(category, field || 'all', exclude);
 
     if (!question) {
       return NextResponse.json(null, { status: 200 });
