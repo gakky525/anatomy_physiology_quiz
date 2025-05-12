@@ -43,6 +43,7 @@ export default function QuestionDisplay({
   const [showLimitNotice, setShowLimitNotice] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const hasShownNoticeRef = useRef(false);
+  const isFirstRenderRef = useRef(true);
 
   const selectedChoice = question?.choices.find((c) => c.id === selected);
   const isCorrect = selectedChoice?.isCorrect;
@@ -78,9 +79,42 @@ export default function QuestionDisplay({
     }
   }, [selected, selectedChoice, question]);
 
+  useEffect(() => {
+    const prefetch = async () => {
+      try {
+        const res = await fetch('/api/questions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ category, field }),
+          cache: 'no-store',
+        });
+
+        if (!res.ok) {
+          const errorText = await res.text();
+          console.error('Initial prefetch failed:', errorText);
+          return;
+        }
+
+        const data = await res.json();
+        if (data && Array.isArray(data.choices)) {
+          setNextQuestion(data);
+        }
+      } catch (err) {
+        console.error('Initial prefetch error:', err);
+      }
+    };
+
+    prefetch();
+  }, [category, field]);
+
   const handleSelect = async (id: number) => {
     if (selected === null) {
       setSelected(id);
+
+      if (isFirstRenderRef.current) {
+        isFirstRenderRef.current = false;
+        return;
+      }
 
       try {
         const res = await fetch('/api/questions', {
