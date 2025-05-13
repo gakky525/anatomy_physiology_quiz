@@ -16,13 +16,11 @@ type Question = {
   choices: Choice[];
 };
 
-function Placeholder() {
+function LoadingUi() {
   return (
-    <div className='space-y-5 animate-pulse'>
-      <div className='h-6 bg-gray-300 rounded w-3/4'></div>
-      {[...Array(5)].map((_, i) => (
-        <div key={i} className='h-6 bg-gray-300 rounded w-full' />
-      ))}
+    <div className='flex flex-col items-center justify-center h-96 text-xl text-gray-600'>
+      <div className='animate-spin rounded-full h-10 w-10 border-4 border-blue-400 border-t-transparent mb-4' />
+      <span>問題を読み込んでいます...</span>
     </div>
   );
 }
@@ -203,7 +201,7 @@ export default function QuestionDisplay({
       )}
 
       {!question || isTransitioning ? (
-        <Placeholder />
+        <LoadingUi />
       ) : (
         <div>
           <h2 className='text-xl font-semibold'>{question.question}</h2>
