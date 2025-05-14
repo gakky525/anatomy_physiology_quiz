@@ -2,14 +2,11 @@
 @import 'tw-animate-css';
 
 .fade {
-  transition: opacity 0.3s ease-in-out;
-  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
 }
-
-.fade-out {
-  opacity: 0;
-}
-
 .fade-in {
   opacity: 1;
+}
+.fade-out {
+  opacity: 0;
 }
