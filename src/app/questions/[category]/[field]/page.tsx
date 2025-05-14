@@ -21,11 +21,11 @@ export async function generateMetadata(
   const previousImages = (await parent).openGraph?.images || [];
 
   return {
-    title: `${categoryLabel} - ${fieldLabel} | 国試対策アプリ`,
-    description: `${categoryLabel}/${fieldLabel}の問題をランダムに出題。国家試験対策に役立つクイズ形式で学習できます。`,
+    title: `【${categoryLabel} - ${fieldLabel}】 - スキマ時間で国試対策`,
+    description: `${categoryLabel}/${fieldLabel}の重要ポイントをランダムで出題します。スマホで手軽に弱点克服！国家試験対策にぴったりの解剖学・生理学の完全無料アプリです。`,
     openGraph: {
-      title: `${categoryLabel} - ${fieldLabel} | 国試対策アプリ`,
-      description: `${categoryLabel}/${fieldLabel}の問題をランダムに出題。国家試験対策に役立つクイズ形式で学習できます。`,
+      title: `【${categoryLabel} - ${fieldLabel}】 - スキマ時間で国試対策`,
+      description: `${categoryLabel}/${fieldLabel}の重要ポイントをランダムで出題します。繰り返し解いて得点力アップ！無料で学べる解剖学・生理学の国家試験対策アプリです。`,
       url: pageUrl,
       siteName: 'スキマ時間にできる国試対策',
       images: [
@@ -37,8 +37,8 @@ export async function generateMetadata(
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${categoryLabel} - ${fieldLabel} | 国試対策アプリ`,
-      description: `${categoryLabel}/${fieldLabel}の問題をランダムに出題。国家試験対策に役立つクイズ形式で学習できます。`,
+      title: `【${categoryLabel} - ${fieldLabel}】 - スキマ時間で国試対策`,
+      description: `${categoryLabel}/${fieldLabel}の問題をランダムで出題します。国家試験対策を効率的に進められる、解剖学・生理学の完全無料アプリです。`,
       images: [`${process.env.NEXT_PUBLIC_SITE_URL}/opengraph-image.png`],
     },
   };

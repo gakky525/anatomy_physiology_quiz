@@ -16,13 +16,13 @@ export async function generateMetadata(
   const previousImages = (await parent).openGraph?.images || [];
 
   return {
-    title: `${categoryLabel} | スキマ時間にできる国試対策`,
-    description: `${categoryLabel}のページです。スキマ時間を活用して苦手な分野を克服しましょう。`,
+    title: `【${categoryLabel}】 - スキマ時間で国試対策`,
+    description: `無料で使える${categoryLabel}の国家試験対策アプリです。分野別に演習できて全問に解説付き！通学中やちょっとした空き時間に最適です。スキマ時間を活用して苦手な分野を克服しましょう！`,
     openGraph: {
-      title: `${categoryLabel} | スキマ時間にできる国試対策`,
-      description: `${categoryLabel}のページです。スキマ時間を活用して苦手な分野を克服しましょう。`,
+      title: `【${categoryLabel}】 - スキマ時間で国試対策`,
+      description: `医療学生向け！国家試験対策に役立つ無料Webアプリです。${categoryLabel}の重要分野をピンポイントで演習できます。`,
       url: pageUrl,
-      siteName: 'スキマ時間にできる国試対策',
+      siteName: '解剖学・生理学 - スキマ時間にできる国試対策',
       images: [
         `${process.env.NEXT_PUBLIC_SITE_URL}/opengraph-image.png`,
         ...previousImages,
@@ -32,8 +32,8 @@ export async function generateMetadata(
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${categoryLabel} | スキマ時間にできる国試対策`,
-      description: `${categoryLabel}のページです。スキマ時間を活用して苦手な分野を克服しましょう。`,
+      title: `【${categoryLabel}】 - スキマ時間で国試対策`,
+      description: `医療学生向け！国家試験対策に役立つ無料Webアプリです。${categoryLabel}の重要分野をピンポイントで演習できます。`,
       images: [`${process.env.NEXT_PUBLIC_SITE_URL}/opengraph-image.png`],
     },
   };

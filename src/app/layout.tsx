@@ -3,16 +3,24 @@ import '../assets/globals.css';
 import LayoutWrapper from './LayoutWrapper';
 
 export const metadata: Metadata = {
-  title: '解剖学・生理学 スキマ時間にできる国試対策',
+  title: '【医療学生向け無料アプリ】解剖学・生理学 - スキマ時間で国試対策',
   description:
-    '通学や講義の間などのスキマ時間にできる、無料の解剖学・生理学 国家試験対策アプリです。スキマ時間を活用して苦手な分野を克服しましょう。',
-  keywords: ['解剖学', '生理学', '国家試験対策', '隙間時間', '医療'],
+    'スマホで今すぐ始められる国家試験対策！通学中や待ち時間にサクッと解ける、解剖学・生理学の完全無料アプリです。スキマ時間を有効活用して苦手な解剖学・生理学を克服しましょう！',
+  keywords: [
+    '解剖学',
+    '生理学',
+    '国家試験対策',
+    '医学生',
+    '看護学生',
+    '隙間時間',
+    '無料アプリ',
+  ],
   openGraph: {
-    title: '解剖学・生理学 スキマ時間にできる国試対策',
+    title: '【医療学生向け無料アプリ】解剖学・生理学 - スキマ時間で国試対策',
     description:
-      '国家試験対策のための解剖学・生理学の演習ができる無料Webアプリです。',
+      'スマホ1つで効率学習！無料で使える国家試験対策アプリです。スキマ時間を有効活用して、苦手な分野を克服しましょう。',
     url: `${process.env.NEXT_PUBLIC_SITE_URL}`,
-    siteName: '解剖学・生理学 スキマ時間にできる国試対策',
+    siteName: '解剖学・生理学 - スキマ時間にできる国試対策',
     images: [
       {
         url: `${process.env.NEXT_PUBLIC_SITE_URL}/opengraph-image.png`,
@@ -25,9 +33,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: '解剖/生理学 隙間時間にできる国試対策',
+    title: '【医療学生向け無料アプリ】解剖学・生理学 - スキマ時間で国試対策',
     description:
-      '国家試験対策のための解剖学・生理学の演習ができる無料Webアプリです。',
+      '通学中やちょっとした空き時間に最適! 全問解説付きの無料Webアプリで、苦手な解剖学・生理学を克服しましょう。',
     images: [`${process.env.NEXT_PUBLIC_SITE_URL}/opengraph-image.png`],
   },
   robots: {
