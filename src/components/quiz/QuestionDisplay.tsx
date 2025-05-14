@@ -18,7 +18,7 @@ type Question = {
 
 function LoadingOverlay() {
   return (
-    <div className='absolute inset-0 z-10 flex flex-col items-center justify-center  bg-opacity-10 pointer-events-none'>
+    <div className='absolute inset-0 z-10 flex flex-col items-center justify-center bg-opacity-10 pointer-events-none'>
       <div className='animate-spin rounded-full h-12 w-12 border-4 border-blue-400 border-t-transparent mb-4' />
       <div className='text-gray-700 text-lg'>次の問題を読み込んでいます...</div>
     </div>
@@ -41,6 +41,11 @@ export default function QuestionDisplay({
   const [showLimitNotice, setShowLimitNotice] = useState(false);
   const [fadeClass, setFadeClass] = useState<'fade-in' | 'fade-out'>('fade-in');
   const [isLoadingNext, setIsLoadingNext] = useState(false);
+  const [excludeHistory, setExcludeHistory] = useState<number[]>([
+    initialQuestion.id,
+  ]);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const hasShownNoticeRef = useRef(false);
   const isFirstRenderRef = useRef(true);
 
@@ -68,6 +73,10 @@ export default function QuestionDisplay({
   };
 
   useEffect(() => {
+    if (isFirstRenderRef.current) {
+      isFirstRenderRef.current = false;
+      return;
+    }
     if (
       selected !== null &&
       selectedChoice &&
@@ -78,59 +87,34 @@ export default function QuestionDisplay({
     }
   }, [selected, selectedChoice, question]);
 
-  // useEffect(() => {
-  //   const prefetch = async () => {
-  //     try {
-  //       const res = await fetch('/api/questions', {
-  //         method: 'POST',
-  //         headers: { 'Content-Type': 'application/json' },
-  //         body: JSON.stringify({
-  //           category,
-  //           field,
-  //           excludeIds: question ? [question.id] : [],
-  //         }),
-  //         cache: 'no-store',
-  //       });
-
-  //       if (!res.ok) {
-  //         const errorText = await res.text();
-  //         console.error('Initial prefetch failed:', errorText);
-  //         return;
-  //       }
-
-  //       const data = await res.json();
-  //       if (data && Array.isArray(data.choices)) {
-  //         setNextQuestion(data);
-  //       }
-  //     } catch (err) {
-  //       console.error('Initial prefetch error:', err);
-  //     }
-  //   };
-
-  //   prefetch();
-  // }, [category, field, question]);
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => setErrorMessage(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage]);
 
   const handleSelect = async (id: number) => {
     if (selected === null) {
       if (!question) return;
       setSelected(id);
 
-      if (isFirstRenderRef.current) {
-        isFirstRenderRef.current = false;
-        return;
-      }
-
       try {
         const res = await fetch('/api/questions', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ category, field, excludeIds: [question.id] }),
+          body: JSON.stringify({
+            category,
+            field,
+            excludeIds: excludeHistory,
+          }),
           cache: 'no-store',
         });
 
         if (!res.ok) {
           const errorText = await res.text();
           console.error('Prefetch failed:', errorText);
+          setErrorMessage('次の問題の読み込みに失敗しました。');
           setNextQuestion(null);
           return;
         }
@@ -139,10 +123,12 @@ export default function QuestionDisplay({
         if (data && Array.isArray(data.choices)) {
           setNextQuestion(data);
         } else {
+          setErrorMessage('取得した問題データが不正です。');
           setNextQuestion(null);
         }
       } catch (err) {
         console.error('Prefetch error:', err);
+        setErrorMessage('問題の読み込み中にエラーが発生しました。');
         setNextQuestion(null);
       }
     }
@@ -168,7 +154,7 @@ export default function QuestionDisplay({
             body: JSON.stringify({
               category,
               field,
-              excludeIds: [question?.id],
+              excludeIds: excludeHistory,
             }),
             cache: 'no-store',
           });
@@ -176,6 +162,9 @@ export default function QuestionDisplay({
           if (!res.ok) {
             const errorText = await res.text();
             console.error('Failed to fetch next question:', errorText);
+            setErrorMessage(
+              '次の問題を取得できませんでした。時間をおいて再度お試しください。'
+            );
             setFadeClass('fade-in');
             setIsLoadingNext(false);
             return;
@@ -184,6 +173,7 @@ export default function QuestionDisplay({
           const data = await res.json();
           if (!data || !Array.isArray(data.choices)) {
             console.error('Invalid data received for next question');
+            setErrorMessage('取得した問題データが不正です。');
             setFadeClass('fade-in');
             setIsLoadingNext(false);
             return;
@@ -195,8 +185,14 @@ export default function QuestionDisplay({
         setSelected(null);
         setFadeClass('fade-in');
         setIsLoadingNext(false);
+
+        setExcludeHistory((prev) => {
+          const updated = [...prev, newQuestion.id];
+          return updated.slice(-5);
+        });
       } catch (err) {
         console.error('handleNext error:', err);
+        setErrorMessage('次の問題の取得中にエラーが発生しました。');
         setFadeClass('fade-in');
         setIsLoadingNext(false);
       }
@@ -205,6 +201,12 @@ export default function QuestionDisplay({
 
   return (
     <div className='relative m-4 min-h-[24rem]'>
+      {errorMessage && (
+        <div className='fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-100 text-red-800 border border-red-400 px-4 py-2 rounded shadow z-50'>
+          {errorMessage}
+        </div>
+      )}
+
       {showLimitNotice && (
         <div className='fixed top-4 left-1/2 transform -translate-x-1/2 bg-yellow-100 text-yellow-800 border border-yellow-400 px-4 py-2 rounded shadow z-50'>
           復習リストの保存上限に達したため、古い問題を削除して保存しました。
