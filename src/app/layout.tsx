@@ -5,7 +5,7 @@ import LayoutWrapper from './LayoutWrapper';
 export const metadata: Metadata = {
   title: '解剖学・生理学 スキマ時間にできる国試対策',
   description:
-    'スキマ時間にできる、解剖学・生理学の国家試験対策アプリです。苦手な分野を選んで効率的に学習を進めましょう。',
+    '通学や講義の間などのスキマ時間にできる、無料の解剖学・生理学 国家試験対策アプリです。スキマ時間を活用して苦手な分野を克服しましょう。',
   keywords: ['解剖学', '生理学', '国家試験対策', '隙間時間', '医療'],
   openGraph: {
     title: '解剖学・生理学 スキマ時間にできる国試対策',
