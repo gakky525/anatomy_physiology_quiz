@@ -86,22 +86,24 @@ export default async function SubjectPage({ params }: Props) {
       >
         {category === 'anatomy' ? '解剖学' : '生理学'}
       </h1>
-      <p className='m-4 text-xl'>分野を選択してください</p>
+      <p className='m-4 text-xl text-gray-700'>
+        学習する分野を選択してください
+      </p>
 
       <div className='w-full max-w-md'>
         <Link
           href={`/questions/${category}/all`}
-          className='block bg-purple-500 hover:bg-purple-600 text-white text-xl font-semibold rounded-lg px-4 py-4 mb-6 text-center shadow'
+          className='block bg-purple-500 hover:bg-purple-600 text-white text-xl font-semibold rounded-xl px-6 py-4 mb-8 text-center shadow transition-transform hover:scale-105'
         >
           全分野から出題
         </Link>
 
-        <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6'>
+        <div className='grid grid-cols-2 sm:grid-cols-3  gap-6'>
           {fields.map((field) => (
             <Link
               key={field}
               href={`/questions/${category}/${field}`}
-              className='bg-gray-50 hover:bg-gray-300 text-xl rounded-lg px-4 py-4 m-1 text-center shadow  w-full'
+              className='bg-gray-50 hover:bg-gray-300 text-xl rounded-xl px-4 py-4 m-1 text-center shadow transition-transform hover:scale-105'
             >
               {field}
             </Link>
@@ -111,7 +113,7 @@ export default async function SubjectPage({ params }: Props) {
 
       <Link
         href='/'
-        className='m-6 bg-gray-300 hover:bg-gray-400 px-4 py-3 rounded-lg shadow transition'
+        className='m-8 bg-gray-300 hover:bg-gray-400 px-5 py-3 rounded-xl shadow transition-transform hover:scale-105'
       >
         トップに戻る
       </Link>

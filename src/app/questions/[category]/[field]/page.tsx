@@ -66,21 +66,23 @@ export default async function QuestionPage({ params }: Props) {
   }
 
   return (
-    <main className='p-4 space-y-6 max-w-3xl mx-auto'>
-      <h1 className='text-3xl font-bold text-center'>
-        <span className='inline-flex items-center gap-4'>
-          <span
-            className={`px-2.5 py-1 border rounded-lg text-3xl font-semibold ${
-              category === 'anatomy'
-                ? 'border-red-500 text-red-500'
-                : 'border-green-500 text-green-500'
-            }`}
-          >
-            {categoryLabel}
-          </span>
-          {fieldLabel}
+    <main className='p-5 space-y-6 max-w-3xl mx-auto'>
+      <div
+        className={`flex justify-center items-center text-2xl font-semibold border-2 rounded-2xl px-5 py-3 w-fit mx-auto shadow ${
+          category === 'anatomy' ? 'border-red-500' : 'border-green-500'
+        }`}
+      >
+        <span
+          className={`${
+            category === 'anatomy' ? 'text-red-500' : 'text-green-500'
+          }`}
+        >
+          {categoryLabel}
         </span>
-      </h1>
+        <span className='mx-2 text-gray-400'> - </span>
+        <span className='text-gray-800'>{fieldLabel}</span>
+      </div>
+
       <QuestionDisplay question={question} category={category} field={field} />
     </main>
   );

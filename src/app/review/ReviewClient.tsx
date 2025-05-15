@@ -67,38 +67,39 @@ export default function ReviewPage() {
   };
 
   return (
-    <main className='p-6 relative max-w-screen-md mx-auto'>
-      <Link
-        href='/'
-        className='absolute top-6 left-6 inline-block bg-gray-300 hover:bg-gray-400 py-2 px-4 rounded-2xl'
-      >
-        トップへ
-      </Link>
-
-      {questions.length > 0 && (
-        <Button
-          className='absolute top-6 right-6 bg-red-500 hover:bg-red-600 text-white rounded-2xl cursor-pointer'
-          onClick={() => setOpenAllDelete(true)}
+    <main className='p-8 relative max-w-screen-md mx-auto'>
+      <div className='flex justify-between items-center mb-4'>
+        <Link
+          href='/'
+          className='inline-flex items-center bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-xl shadow transition-transform hover:scale-105'
         >
-          全削除
-        </Button>
-      )}
-
-      <h1 className='text-2xl mt-14 font-semibold text-center'>
-        最近間違えた問題
-      </h1>
-      <div
-        className={`m-2 text-md text-center font-medium ${
-          questions.length >= 100 ? 'text-red-500' : 'text-gray-700'
-        }`}
-      >
-        <p>現在保存されている問題数 (最大100問)</p>
-        <p>{questions.length} / 100問</p>
+          トップへ
+        </Link>
+        {questions.length > 0 && (
+          <Button
+            className='bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl shadow transition-transform hover:scale-105'
+            onClick={() => setOpenAllDelete(true)}
+          >
+            全削除
+          </Button>
+        )}
       </div>
 
-      <div className='mb-3 mx-auto w-full max-w-sm h-2 bg-gray-200 rounded-full overflow-hidden'>
+      <h1 className='text-3xl text-gray-800 font-bold text-center mb-3'>
+        復習
+      </h1>
+      <div
+        className={`text-center font-medium mb-2 ${
+          questions.length >= 100 ? 'text-red-500' : 'text-gray-800'
+        }`}
+      >
+        <p>最近間違えた問題が最大100問まで保存されます。</p>
+        <p>現在：{questions.length} / 100問</p>
+      </div>
+
+      <div className='relative w-full mx-auto max-w-md h-3 bg-gray-200 rounded-full overflow-hidden shadow mb-4'>
         <div
-          className={`h-full transition-all duration-300 ${
+          className={`absolute top-0 left-0 h-full transition-all duration-400 ease-in-out ${
             questions.length >= 100 ? 'bg-red-500' : 'bg-green-500'
           }`}
           style={{ width: `${(questions.length / 100) * 100}%` }}
@@ -106,7 +107,7 @@ export default function ReviewPage() {
       </div>
 
       {questions.length >= 100 && (
-        <p className='text-sm text-red-500 text-center m-2'>
+        <p className='text-sm text-red-500 text-center mb-4'>
           保存上限に達しています。古いものから順に削除されます。
         </p>
       )}
@@ -120,31 +121,34 @@ export default function ReviewPage() {
           {questions.map((q) => (
             <li
               key={q.id}
-              className='relative border p-4 rounded-lg shadow-sm bg-gray-50'
+              className='relative border rounded-xl p-5 shadow-md bg-gray-50'
             >
               <Button
                 variant='ghost'
                 title='この問題を削除'
                 aria-label='削除'
-                className='absolute top-1/2 right-2 -translate-y-1/2 text-red-500 hover:text-red-600 p-1 cursor-pointer'
+                className='absolute top-1/2 right-2 -translate-y-1/2 text-red-500 hover:text-red-600 p-1 cursor-pointer transition-transform hover:scale-110'
                 size='icon'
                 onClick={() => confirmDelete(q.id)}
               >
                 <Trash2 className='w-5 h-5' />
               </Button>
 
-              <p className='font-semibold'>{q.question}</p>
-              <ul className='mt-2 space-y-2'>
+              <p className='font-semibold text-lg mb-2'>{q.question}</p>
+              <ul className='space-y-2'>
                 {q.choices.map((c, i) => (
                   <li
                     key={c.id}
-                    className={cn(c.isCorrect && 'text-green-600 font-bold')}
+                    className={cn(
+                      'text-gray-700',
+                      c.isCorrect && 'text-green-600 font-bold'
+                    )}
                   >
                     {i + 1}. {c.text}
                   </li>
                 ))}
               </ul>
-              <p className='bg-yellow-50 border-l-4 border-yellow-400 p-1.5 mt-2'>
+              <p className='mt-2 bg-yellow-50 border-l-4 border-yellow-400 p-2 rounded-md'>
                 {q.explanation}
               </p>
             </li>
@@ -158,21 +162,20 @@ export default function ReviewPage() {
             <DialogTitle className='text-center text-lg font-bold'>
               本当に削除しますか？
             </DialogTitle>
-            <DialogDescription className='text-sm text-center text-black'>
+            <DialogDescription className='text-sm text-center'>
               この問題を復習リストから削除します。
             </DialogDescription>
           </DialogHeader>
-
           <div className='flex justify-center gap-4 mt-4'>
             <Button
               variant='outline'
-              className='rounded-full px-4 border-black hover:bg-gray-200 cursor-pointer'
+              className='rounded-xl px-4 border-black bg-gray-200 hover:bg-gray-300 cursor-pointer transition-transform hover:scale-105'
               onClick={() => setOpen(false)}
             >
               キャンセル
             </Button>
             <Button
-              className='rounded-full px-4 bg-red-500 hover:bg-red-600 text-white cursor-pointer'
+              className='rounded-xl px-4 bg-red-500 hover:bg-red-600 text-white cursor-pointer transition-transform hover:scale-105'
               onClick={handleDelete}
             >
               削除する
@@ -187,21 +190,20 @@ export default function ReviewPage() {
             <DialogTitle className='text-center text-lg font-bold'>
               本当にすべて削除しますか？
             </DialogTitle>
-            <DialogDescription className='text-sm text-center text-black'>
+            <DialogDescription className='text-sm text-center'>
               復習リストのすべての問題を削除します。この操作は元に戻せません。
             </DialogDescription>
           </DialogHeader>
-
           <div className='flex justify-center gap-4 mt-4'>
             <Button
               variant='outline'
-              className='rounded-full px-4 border-black hover:bg-gray-200 cursor-pointer'
+              className='rounded-xl px-4 border-black bg-gray-200 hover:bg-gray-300 cursor-pointer transition-transform hover:scale-105'
               onClick={() => setOpenAllDelete(false)}
             >
               キャンセル
             </Button>
             <Button
-              className='rounded-full px-4 bg-red-500 text-white hover:bg-red-600 cursor-pointer'
+              className='rounded-xl px-4 text-white bg-red-500 hover:bg-red-600 cursor-pointer transition-transform hover:scale-105'
               onClick={handleDeleteAll}
             >
               すべて削除
