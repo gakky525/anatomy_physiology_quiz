@@ -57,7 +57,7 @@ export default async function QuestionPage({ params }: Props) {
         <p className='text-2xl'>この分野の問題は現在作成中です。</p>
         <Link
           href={`/subjects/${category}`}
-          className='mt-4 bg-gray-300 hover:bg-gray-400 px-6 py-4 rounded-lg shadow transition'
+          className='mt-4 bg-gray-300 hover:bg-gray-400 border border-gray-500 px-6 py-4 rounded-lg shadow transition'
         >
           分野選択へ戻る
         </Link>
@@ -66,7 +66,7 @@ export default async function QuestionPage({ params }: Props) {
   }
 
   return (
-    <main className='p-5 space-y-6 max-w-3xl mx-auto'>
+    <main className='p-4 space-y-6 max-w-3xl mx-auto'>
       <div
         className={`flex justify-center items-center text-2xl font-semibold border-2 rounded-2xl px-5 py-3 w-fit mx-auto shadow ${
           category === 'anatomy' ? 'border-red-500' : 'border-green-500'

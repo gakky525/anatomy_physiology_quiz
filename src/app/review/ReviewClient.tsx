@@ -71,13 +71,13 @@ export default function ReviewPage() {
       <div className='flex justify-between items-center mb-4'>
         <Link
           href='/'
-          className='inline-flex items-center bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-xl shadow transition-transform hover:scale-105'
+          className='inline-flex items-center bg-gray-300 hover:bg-gray-400 border border-gray-500 px-4 py-2 rounded-xl shadow transition-transform hover:scale-105'
         >
           トップへ
         </Link>
         {questions.length > 0 && (
           <Button
-            className='bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl shadow transition-transform hover:scale-105'
+            className='bg-red-500 hover:bg-red-600 text-white px-6 py-5 rounded-xl shadow transition-transform hover:scale-105'
             onClick={() => setOpenAllDelete(true)}
           >
             全削除

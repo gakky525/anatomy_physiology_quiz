@@ -232,14 +232,14 @@ export default function QuestionDisplay({
           <div className='flex justify-between mt-6'>
             <button
               onClick={handleBack}
-              className='bg-gray-300 hover:bg-gray-400 px-5 py-3 rounded-xl cursor-pointer shadow transition-transform hover:scale-105'
+              className='bg-gray-300 hover:bg-gray-400 border border-gray-500 px-5 py-3 rounded-xl cursor-pointer shadow transition-transform hover:scale-105'
             >
               分野選択へ
             </button>
             {selected !== null && (
               <button
                 onClick={handleNext}
-                className='bg-blue-400 hover:bg-blue-500 text-white px-5 py-3 rounded-xl cursor-pointer shadow transition-transform hover:scale-105'
+                className='bg-blue-400 hover:bg-blue-500 border border-blue-500 text-white px-5 py-3 rounded-xl cursor-pointer shadow transition-transform hover:scale-105'
               >
                 次の問題へ
               </button>

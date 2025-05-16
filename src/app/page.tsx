@@ -33,12 +33,14 @@ export default function Home() {
             {
               href: '/subjects/anatomy',
               label: '解剖学',
-              color: 'bg-red-100 hover:bg-red-200 text-red-800',
+              color:
+                'bg-red-100 hover:bg-red-200 text-red-800 border border-red-500',
             },
             {
               href: '/subjects/physiology',
               label: '生理学',
-              color: 'bg-green-100 hover:bg-green-200 text-green-800',
+              color:
+                'bg-green-100 hover:bg-green-200 text-green-800 border border-green-500',
             },
           ].map(({ href, label, color }) => (
             <Link
@@ -53,7 +55,7 @@ export default function Home() {
 
         <Link
           href='/review'
-          className='inline-block mt-4 sm:mt-6 bg-yellow-200 hover:bg-yellow-300 text-yellow-900 text-base font-semibold px-6 py-5 rounded-2xl shadow-md transition-transform hover:scale-105'
+          className='inline-block mt-4 sm:mt-6 bg-yellow-200 hover:bg-yellow-300 text-yellow-900 border border-yellow-500 text-base font-semibold px-6 py-5 rounded-2xl shadow-md transition-transform hover:scale-105'
         >
           復習する
         </Link>
