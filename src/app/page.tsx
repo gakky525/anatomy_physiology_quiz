@@ -2,30 +2,28 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <main className='flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-amber-50 via-yellow-50 to-white px-4 py-12 sm:py-16'>
-      <div className='max-w-3xl w-full text-center space-y-10'>
+    <main className='m-2 flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-amber-50 via-yellow-50 to-white px-4 py-12 sm:py-16'>
+      <div className='max-w-3xl w-full text-center space-y-8'>
         <div>
           <h1 className='text-5xl sm:text-6xl font-extrabold tracking-tight leading-tight'>
             <span className='text-red-500 drop-shadow-md'>解剖学</span>・
             <span className='text-green-600 drop-shadow-md'>生理学</span>
           </h1>
           <h2 className='mt-3 text-xl sm:text-2xl text-gray-600 font-semibold tracking-wide'>
-            スキマ時間でできる国家試験対策
+            スキマ時間にできる国家試験対策
           </h2>
         </div>
 
         <div className='space-y-2 text-gray-700 text-base sm:text-lg leading-relaxed'>
           <p>
-            医療学生のための解剖学・生理学の無料アプリです。
+            解剖学・生理学の問題が無料で解ける、医療学生のための国家試験対策アプリです。
             <br className='hidden sm:inline' />
-            通学中・休憩中のスキマ時間を活用して、
-            <br className='hidden sm:inline' />
-            苦手な分野を克服しましょう。
+            通学中や休憩時間のスキマ時間を活用して、苦手な分野を克服しましょう！
           </p>
         </div>
 
         <p className='text-xl sm:text-2xl font-semibold text-gray-700'>
-          学習したいカテゴリを選んでください
+          学習したい項目を選んでください
         </p>
 
         <div className='flex flex-col sm:flex-row items-center justify-center gap-6'>
