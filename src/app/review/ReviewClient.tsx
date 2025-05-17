@@ -3,28 +3,10 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 import { Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-type Choice = {
-  id: number;
-  text: string;
-  isCorrect: boolean;
-};
-
-type Question = {
-  id: number;
-  question: string;
-  explanation: string;
-  choices: Choice[];
-};
+import type { Question } from '@/types/questions';
+import ConfirmDialog from '@/components/ConfirmDialog';
 
 export default function ReviewPage() {
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -156,61 +138,25 @@ export default function ReviewPage() {
         </ul>
       )}
 
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className='rounded-xl shadow-lg bg-gray-50 w-[80%] sm:max-w-sm mx-auto'>
-          <DialogHeader>
-            <DialogTitle className='text-center text-lg font-bold'>
-              本当に削除しますか？
-            </DialogTitle>
-            <DialogDescription className='text-sm text-center'>
-              この問題を復習リストから削除します。
-            </DialogDescription>
-          </DialogHeader>
-          <div className='flex justify-center gap-4 mt-4'>
-            <Button
-              variant='outline'
-              className='rounded-xl px-4 border-black bg-gray-200 hover:bg-gray-300 cursor-pointer transition-transform hover:scale-105'
-              onClick={() => setOpen(false)}
-            >
-              キャンセル
-            </Button>
-            <Button
-              className='rounded-xl px-4 bg-red-500 hover:bg-red-600 text-white cursor-pointer transition-transform hover:scale-105'
-              onClick={handleDelete}
-            >
-              削除する
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <ConfirmDialog
+        open={open}
+        onOpenChange={setOpen}
+        title='本当に削除しますか？'
+        description='この問題を復習リストから削除します。'
+        onConfirm={handleDelete}
+        confirmText='削除する'
+        cancelText='キャンセル'
+      />
 
-      <Dialog open={openAllDelete} onOpenChange={setOpenAllDelete}>
-        <DialogContent className='rounded-xl shadow-lg bg-gray-50 w-[80%] sm:max-w-sm mx-auto'>
-          <DialogHeader>
-            <DialogTitle className='text-center text-lg font-bold'>
-              本当にすべて削除しますか？
-            </DialogTitle>
-            <DialogDescription className='text-sm text-center'>
-              復習リストのすべての問題を削除します。この操作は元に戻せません。
-            </DialogDescription>
-          </DialogHeader>
-          <div className='flex justify-center gap-4 mt-4'>
-            <Button
-              variant='outline'
-              className='rounded-xl px-4 border-black bg-gray-200 hover:bg-gray-300 cursor-pointer transition-transform hover:scale-105'
-              onClick={() => setOpenAllDelete(false)}
-            >
-              キャンセル
-            </Button>
-            <Button
-              className='rounded-xl px-4 text-white bg-red-500 hover:bg-red-600 cursor-pointer transition-transform hover:scale-105'
-              onClick={handleDeleteAll}
-            >
-              すべて削除
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <ConfirmDialog
+        open={openAllDelete}
+        onOpenChange={setOpenAllDelete}
+        title='本当にすべて削除しますか？'
+        description='復習リストのすべての問題を削除します。この操作は元に戻せません。'
+        onConfirm={handleDeleteAll}
+        confirmText='すべて削除'
+        cancelText='キャンセル'
+      />
     </main>
   );
 }

@@ -2,28 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
-
-type Choice = {
-  id: number;
-  text: string;
-  isCorrect: boolean;
-};
-
-type Question = {
-  id: number;
-  question: string;
-  explanation: string;
-  choices: Choice[];
-};
-
-function LoadingOverlay() {
-  return (
-    <div className='flex flex-col items-center justify-center min-h-[60vh] text-xl text-gray-700'>
-      <div className='animate-spin rounded-full h-10 w-10 border-4 border-blue-400 border-t-transparent mb-4' />
-      <span>次の問題を読み込んでいます...</span>
-    </div>
-  );
-}
+import LoadingUi from '../LoadingUi';
+import type { Question } from '@/types/questions';
 
 export default function QuestionDisplay({
   question: initialQuestion,
@@ -173,10 +153,10 @@ export default function QuestionDisplay({
         </div>
       )}
 
-      {isLoadingNext && <LoadingOverlay />}
+      {isLoadingNext && <LoadingUi />}
 
       {!question ? (
-        <LoadingOverlay />
+        <LoadingUi />
       ) : (
         <div className={`fade ${fadeClass}`}>
           <h2 className='text-xl font-semibold'>{question.question}</h2>

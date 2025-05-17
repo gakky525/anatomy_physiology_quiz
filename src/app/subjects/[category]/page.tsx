@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import type { Metadata, ResolvingMetadata } from 'next';
+import { subjects } from '@/lib/subjects';
 
 type Props = {
   params: Promise<{ category: string }>;
@@ -44,32 +45,6 @@ export function generateStaticParams() {
 }
 
 export const dynamic = 'error';
-
-const subjects = {
-  anatomy: [
-    '骨',
-    '筋',
-    '神経',
-    '循環器',
-    '呼吸器',
-    '消化器',
-    '泌尿器',
-    // 'new',
-  ],
-  physiology: [
-    '感覚',
-    '内分泌',
-    '血液・免疫',
-    '消化と吸収',
-    '排泄',
-    '生殖',
-    '代謝',
-    '呼吸',
-    // '神経',
-    // '筋',
-    // 'new',
-  ],
-};
 
 export default async function SubjectPage({ params }: Props) {
   const { category } = await params;
