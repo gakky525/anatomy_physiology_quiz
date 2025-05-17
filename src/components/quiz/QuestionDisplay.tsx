@@ -18,9 +18,9 @@ type Question = {
 
 function LoadingOverlay() {
   return (
-    <div className='absolute inset-0 z-10 flex flex-col items-center justify-center bg-opacity-10 pointer-events-none'>
-      <div className='animate-spin rounded-full h-12 w-12 border-4 border-blue-400 border-t-transparent mb-4' />
-      <div className='text-gray-700 text-lg'>次の問題を読み込んでいます...</div>
+    <div className='flex flex-col items-center justify-center min-h-[60vh] text-xl text-gray-700'>
+      <div className='animate-spin rounded-full h-10 w-10 border-4 border-blue-400 border-t-transparent mb-4' />
+      <span>次の問題を読み込んでいます...</span>
     </div>
   );
 }
@@ -176,10 +176,7 @@ export default function QuestionDisplay({
       {isLoadingNext && <LoadingOverlay />}
 
       {!question ? (
-        <div className='flex flex-col items-center justify-center min-h-[60vh] text-xl text-gray-700'>
-          <div className='animate-spin rounded-full h-10 w-10 border-4 border-blue-400 border-t-transparent mb-4' />
-          <span>次の問題を読み込んでいます...</span>
-        </div>
+        <LoadingOverlay />
       ) : (
         <div className={`fade ${fadeClass}`}>
           <h2 className='text-xl font-semibold'>{question.question}</h2>
