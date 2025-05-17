@@ -11,8 +11,11 @@ import ConfirmDialog from '@/components/ConfirmDialog';
 export default function ReviewPage() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [open, setOpen] = useState(false);
-  const [openAllDelete, setOpenAllDelete] = useState(false); // 全て削除のモーダル
+  const [openAllDelete, setOpenAllDelete] = useState(false);
   const [targetId, setTargetId] = useState<number | null>(null);
+
+  const MAX_QUESTIONS = 100;
+  const isOverLimit = questions.length >= MAX_QUESTIONS;
 
   useEffect(() => {
     try {
@@ -72,23 +75,27 @@ export default function ReviewPage() {
       </h1>
       <div
         className={`text-center font-medium mb-2 ${
-          questions.length >= 100 ? 'text-red-500' : 'text-gray-800'
+          isOverLimit ? 'text-red-500' : 'text-gray-800'
         }`}
       >
-        <p>最近間違えた問題が最大100問まで保存されます。</p>
-        <p>現在：{questions.length} / 100問</p>
+        <p>最近間違えた問題が最大{MAX_QUESTIONS}問まで保存されます。</p>
+        <p>
+          現在：{questions.length} / {MAX_QUESTIONS}問
+        </p>
       </div>
 
       <div className='relative w-full mx-auto max-w-md h-3 bg-gray-200 rounded-full overflow-hidden shadow mb-4'>
         <div
-          className={`absolute top-0 left-0 h-full transition-all duration-400 ease-in-out ${
-            questions.length >= 100 ? 'bg-red-500' : 'bg-green-500'
+          className={`absolute top-0 left-0 h-full transition-all duration-300 ease-in-out ${
+            isOverLimit ? 'bg-red-500' : 'bg-green-500'
           }`}
-          style={{ width: `${(questions.length / 100) * 100}%` }}
+          style={{
+            width: `${(questions.length / MAX_QUESTIONS) * MAX_QUESTIONS}%`,
+          }}
         />
       </div>
 
-      {questions.length >= 100 && (
+      {isOverLimit && (
         <p className='text-sm text-red-500 text-center mb-4'>
           保存上限に達しています。古いものから順に削除されます。
         </p>

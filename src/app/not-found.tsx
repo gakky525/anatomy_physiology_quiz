@@ -11,7 +11,7 @@ export default function NotFound() {
       </p>
       <Link
         href='/'
-        className='mt-4 bg-gray-300 hover:bg-gray-400 px-6 py-3 rounded-full shadow transition'
+        className='mt-4 bg-gray-300 hover:bg-gray-400 border border-gray-500 px-6 py-3 rounded-xl cursor-pointer shadow transition-transform hover:scale-105'
       >
         トップへ戻る
       </Link>

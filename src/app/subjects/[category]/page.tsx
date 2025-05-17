@@ -7,15 +7,17 @@ type Props = {
   params: Promise<{ category: string }>;
 };
 
+const getCategoryLabel = (category: string) =>
+  category === 'anatomy' ? '解剖学' : '生理学';
+
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { category } = await params;
-  const categoryLabel = category === 'anatomy' ? '解剖学' : '生理学';
+  const categoryLabel = getCategoryLabel(category);
   const pageUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/subjects/${category}`;
   const previousImages = (await parent).openGraph?.images || [];
-
   return {
     title: `【${categoryLabel}】 - スキマ時間で国試対策`,
     description: `無料で使える${categoryLabel}の国家試験対策アプリです。分野別に演習できて全問に解説付き！通学中やちょっとした空き時間に最適です。スキマ時間を活用して苦手な分野を克服しましょう！`,
@@ -49,6 +51,7 @@ export const dynamic = 'error';
 export default async function SubjectPage({ params }: Props) {
   const { category } = await params;
   const fields = subjects[category as keyof typeof subjects];
+  const categoryLabel = getCategoryLabel(category);
 
   if (!fields) return notFound();
 
@@ -59,26 +62,25 @@ export default async function SubjectPage({ params }: Props) {
           category === 'anatomy' ? 'text-red-600' : 'text-green-600'
         }`}
       >
-        {category === 'anatomy' ? '解剖学' : '生理学'}
+        {categoryLabel}
       </h1>
       <p className='m-4 text-xl text-gray-700'>
         学習する分野を選択してください
       </p>
 
-      <div className='w-full max-w-md'>
+      <div className='w-full max-w-md text-xl'>
         <Link
           href={`/questions/${category}/all`}
-          className='block bg-purple-500 hover:bg-purple-600 border border-purple-500 text-white text-xl font-semibold rounded-xl px-6 py-4 mb-8 text-center shadow transition-transform hover:scale-105'
+          className='block bg-purple-500 hover:bg-purple-600 border border-purple-500 text-white font-semibold rounded-xl px-6 py-4 mb-8 text-center shadow transition-transform hover:scale-105'
         >
           全分野から出題
         </Link>
-
         <div className='grid grid-cols-2 sm:grid-cols-3  gap-6'>
           {fields.map((field) => (
             <Link
               key={field}
               href={`/questions/${category}/${field}`}
-              className='bg-gray-50 hover:bg-gray-300 border border-gray-500 text-xl rounded-xl px-4 py-4 m-1 text-center shadow transition-transform hover:scale-105'
+              className='bg-gray-50 hover:bg-gray-300 border border-gray-500 rounded-xl px-4 py-4 m-1 text-center shadow transition-transform hover:scale-105'
             >
               {field}
             </Link>

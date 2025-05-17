@@ -153,9 +153,7 @@ export default function QuestionDisplay({
         </div>
       )}
 
-      {isLoadingNext && <LoadingUi />}
-
-      {!question ? (
+      {!question || isLoadingNext ? (
         <LoadingUi />
       ) : (
         <div className={`fade ${fadeClass}`}>

@@ -9,15 +9,24 @@ type Props = {
   params: Promise<{ category: string; field: string }>;
 };
 
+function getCategoryAndFieldLabels(category: string, field: string) {
+  const categoryLabel = category === 'anatomy' ? '解剖学' : '生理学';
+  const decodedField = decodeURIComponent(field);
+  const fieldLabel = decodedField === 'all' ? '全分野' : decodedField;
+  return { categoryLabel, fieldLabel, decodedField };
+}
+
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { category, field } = await params;
-  const categoryLabel = category === 'anatomy' ? '解剖学' : '生理学';
-  const decodedField = decodeURIComponent(field);
-  const fieldLabel = decodedField === 'all' ? '全分野' : decodedField;
-  const pageUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/questions/${category}/${field}`;
+  const { categoryLabel, fieldLabel } = getCategoryAndFieldLabels(
+    category,
+    field
+  );
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  const pageUrl = `${siteUrl}/questions/${category}/${field}`;
   const previousImages = (await parent).openGraph?.images || [];
 
   return {
@@ -28,10 +37,7 @@ export async function generateMetadata(
       description: `${categoryLabel}/${fieldLabel}の重要ポイントをランダムで出題します。繰り返し解いて得点力アップ！無料で学べる解剖学・生理学の国家試験対策アプリです。`,
       url: pageUrl,
       siteName: 'スキマ時間にできる国試対策',
-      images: [
-        `${process.env.NEXT_PUBLIC_SITE_URL}/opengraph-image.png`,
-        ...previousImages,
-      ],
+      images: [`${siteUrl}/opengraph-image.png`, ...previousImages],
       locale: 'ja_JP',
       type: 'website',
     },
@@ -39,16 +45,17 @@ export async function generateMetadata(
       card: 'summary_large_image',
       title: `【${categoryLabel} - ${fieldLabel}】 - スキマ時間で国試対策`,
       description: `${categoryLabel}/${fieldLabel}の問題をランダムで出題します。国家試験対策を効率的に進められる、解剖学・生理学の完全無料アプリです。`,
-      images: [`${process.env.NEXT_PUBLIC_SITE_URL}/opengraph-image.png`],
+      images: [`${siteUrl}/opengraph-image.png`],
     },
   };
 }
 
 export default async function QuestionPage({ params }: Props) {
   const { category, field } = await params;
-  const decodedField = decodeURIComponent(field);
-  const categoryLabel = category === 'anatomy' ? '解剖学' : '生理学';
-  const fieldLabel = decodedField === 'all' ? '全分野' : decodedField;
+  const { categoryLabel, fieldLabel, decodedField } = getCategoryAndFieldLabels(
+    category,
+    field
+  );
   const question = await getRandomQuestion(category, decodedField);
 
   if (!question) {
@@ -57,7 +64,7 @@ export default async function QuestionPage({ params }: Props) {
         <p className='text-2xl'>この分野の問題は現在作成中です。</p>
         <Link
           href={`/subjects/${category}`}
-          className='mt-4 bg-gray-300 hover:bg-gray-400 border border-gray-500 px-6 py-4 rounded-lg shadow transition'
+          className='bg-gray-300 hover:bg-gray-400 border border-gray-500 px-6 py-4 rounded-lg shadow transition'
         >
           分野選択へ戻る
         </Link>

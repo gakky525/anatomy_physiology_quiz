@@ -1,5 +1,19 @@
 import Link from 'next/link';
 
+const subjectLinks = [
+  {
+    href: '/subjects/anatomy',
+    label: '解剖学',
+    color: 'bg-red-100 hover:bg-red-200 text-red-800 border border-red-500',
+  },
+  {
+    href: '/subjects/physiology',
+    label: '生理学',
+    color:
+      'bg-green-100 hover:bg-green-200 text-green-800 border border-green-500',
+  },
+];
+
 export default function Home() {
   return (
     <main className='m-2 flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-amber-50 via-yellow-50 to-white px-4 py-12 sm:py-16'>
@@ -27,20 +41,7 @@ export default function Home() {
         </p>
 
         <div className='flex flex-col sm:flex-row items-center justify-center gap-6'>
-          {[
-            {
-              href: '/subjects/anatomy',
-              label: '解剖学',
-              color:
-                'bg-red-100 hover:bg-red-200 text-red-800 border border-red-500',
-            },
-            {
-              href: '/subjects/physiology',
-              label: '生理学',
-              color:
-                'bg-green-100 hover:bg-green-200 text-green-800 border border-green-500',
-            },
-          ].map(({ href, label, color }) => (
+          {subjectLinks.map(({ href, label, color }) => (
             <Link
               key={label}
               href={href}

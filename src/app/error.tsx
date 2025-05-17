@@ -23,13 +23,13 @@ export default function GlobalError({
       <div className='flex gap-8 mt-4'>
         <button
           onClick={() => reset()}
-          className='bg-blue-500 hover:bg-blue-600 text-white px-6 py-4 rounded-full shadow transition cursor-pointer'
+          className='bg-blue-500 hover:bg-blue-600 border border-blue-500 text-white px-6 py-4 rounded-xl shadow transition-transform hover:scale-105 cursor-pointer'
         >
           もう一度試す
         </button>
         <Link
           href='/'
-          className='bg-gray-300 hover:bg-gray-400 px-6 py-4 rounded-full shadow transition'
+          className='bg-gray-300 hover:bg-gray-400 border border-gray-500 px-6 py-4 rounded-xl shadow transition-transform hover:scale-105 cursor-pointer'
         >
           トップへ戻る
         </Link>
