@@ -53,7 +53,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const questionPages: MetadataRoute.Sitemap = questions.map((q) => ({
     url: `https://anatomyphysiologyquiz.vercel.app/questions/${encodeURIComponent(
-      q.category
+      q.category.toLowerCase()
     )}/${encodeURIComponent(q.field)}`,
     lastModified: now,
     changeFrequency: 'weekly',
