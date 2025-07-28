@@ -1,21 +1,32 @@
 # 解剖学・生理学 | スキマ時間にできる国試対策
 
-![Next.js](https://img.shields.io/badge/Next.js-15.4.2-blue?logo=nextdotjs)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue?logo=typescript)
-![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-4.1-blue?logo=tailwindcss)
-![Prisma](https://img.shields.io/badge/Prisma-6.12.0-blue?logo=prisma)
-![Supabase](https://img.shields.io/badge/Supabase-Platform-green?logo=supabase)
-![Vercel](https://img.shields.io/badge/Vercel-Hosting-yellow?logo=vercel)
-
 医療系国家資格を目指す学生向けの、**解剖学・生理学をスキマ時間で効率よく学習できる Web アプリ**です。国家試験形式の問題にスマホで手軽にチャレンジでき、復習もしやすいように設計しました。
 
 ---
 
 ## アプリ URL
 
-▶️ [https://anatomyphysiologyquiz.vercel.app/](https://anatomyphysiologyquiz.vercel.app/)
+[https://anatomyphysiologyquiz.vercel.app/](https://anatomyphysiologyquiz.vercel.app/)
 
-PC / スマホ両対応です。アカウント登録なしで今すぐ利用できます。
+PC / スマホ両対応です。アカウント登録不要で今すぐ利用できます。
+
+---
+
+### アプリ開発背景
+
+「通学中や授業の合間などのスキマ時間に、少しでも勉強を進めたい。」
+国家試験前の私は、いつもそう考えていました。
+しかし、混雑した電車やバスの中で参考書を広げるのは手間がかかり、正直、気が進まないことも多くありました。
+スマホで手軽に勉強できるアプリを探してみたこともありましたが、使い勝手が悪かったり、自分のニーズに合わなかったりして、結局は参考書に頼らざるを得ませんでした。
+
+「もしあのとき、使いやすい学習アプリがあれば…」
+そんな思いが、このアプリを開発しようと考えたきっかけです。
+
+このアプリは、医療系国家試験の共通基盤となる「解剖学・生理学」に特化し、スキマ時間にスマホひとつで完結する学習体験を提供します。
+学習したい分野を選ぶだけで問題が表示され、解答後すぐに解説を確認できるため、2〜3 分の短い空き時間でも、教科書なしで理解を深められるよう工夫しています。
+また、間違えた問題は自動的にブラウザに保存されるため、後から復習することも可能です。
+
+このアプリが、かつての私と同じようにスキマ時間を有効活用したいと願う医療学生の力になれば嬉しく思います。
 
 ---
 
@@ -27,7 +38,6 @@ PC / スマホ両対応です。アカウント登録なしで今すぐ利用で
 - 回答結果と解説をその場で表示
 - 間違えた問題は自動でローカルストレージに保存し、復習ページに表示
 - スマホ対応のレスポンシブデザイン
-- SNS シェア時の OGP 画像もページごとに設定済み
 
 ---
 
@@ -49,15 +59,28 @@ PC / スマホ両対応です。アカウント登録なしで今すぐ利用で
 
 ## 使用技術スタック
 
+![Next.js](https://img.shields.io/badge/Next.js-15.4.2-blue?logo=nextdotjs)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue?logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-4.1-blue?logo=tailwindcss)
+![Prisma](https://img.shields.io/badge/Prisma-6.12.0-blue?logo=prisma)
+![Supabase](https://img.shields.io/badge/Supabase-Platform-green?logo=supabase)
+![Vercel](https://img.shields.io/badge/Vercel-Hosting-yellow?logo=vercel)
+
 | 分類           | 技術構成                                          | 補足説明                                                     |
 | -------------- | ------------------------------------------------- | ------------------------------------------------------------ |
-| フロントエンド | Next.js 15 (App Router)、TypeScript、Tailwind CSS | 最新の App Router 構成で、型安全性とモバイル対応を考慮       |
-| バックエンド   | Next.js Server Actions、REST API                  | 状況に応じて使い分け、API レスポンスの最適化を実施           |
-| データベース   | Supabase（PostgreSQL）、Prisma ORM                | クラウド DB として Supabase を利用し、型安全な Prisma を併用 |
-| デプロイ       | Vercel                                            | GitHub 連携により、プッシュ時に自動でデプロイ                |
-| その他         | OGP 設定、ルーティング設計、git、gitHub           | SEO 対応のための OGP 設定も実装                              |
+| Frontend       | Next.js 15 (App Router)、TypeScript、Tailwind CSS | 最新の App Router 構成で、型安全性とモバイル対応を考慮       |
+| Backend        | Next.js Server Actions、TypeScript                | 状況に応じて使い分け、パフォーマンスの最適化を実施           |
+| Database       | Supabase（PostgreSQL）、Prisma                    | クラウド DB として Supabase を利用し、型安全な Prisma を併用 |
+| Infrastructure | Vercel                                            | GitHub 連携により、プッシュ時に自動でデプロイ                |
+| etc            | OGP 設定、git、gitHub                             | SEO 対応のための OGP 設定も実装                              |
 
 > Supabase の手軽さと Prisma の型安全性を両立する設計に挑戦しました。Next.js App Router で柔軟なルーティングとパフォーマンス最適化も実装しています。
+
+---
+
+## ER 図
+
+![ER Diagram](./public/screenshots/er-diagram.png)
 
 ---
 
@@ -84,6 +107,8 @@ PC / スマホ両対応です。アカウント登録なしで今すぐ利用で
 │ │ │ └── page.tsx # 分野選択ページ
 │ │ ├── layout.tsx # アプリ全体のレイアウト
 │ │ ├── page.tsx # ホーム画面
+│ │ ├── robots.ts # SEO最適化
+│ │ ├── sitemap.ts #SEO最適化
 │ │ └── ... # その他エラーページやローディングページなど
 │ ├── assets/
 │ │ └── global.css
@@ -98,8 +123,8 @@ PC / スマホ両対応です。アカウント登録なしで今すぐ利用で
 │ │ ├── prisma.ts # Prisma クライアント初期化
 │ │ ├── subjects.ts # 科目や分野の一覧・ラベル定義
 │ │ └── utils.ts # ユーティリティ関数
-│ ├── types/
-│ │ └── questions.ts # 問題オブジェクトの型情報
+│ └── types/
+│   └── questions.ts # 問題オブジェクトの型情報
 ├── .env # 環境変数（Supabaseなどの接続情報）
 ├── .gitignore # Git追跡除外ファイル一覧
 ├── next.config.js # Next.js の設定ファイル
@@ -117,14 +142,3 @@ PC / スマホ両対応です。アカウント登録なしで今すぐ利用で
 - タイマー機能（「20 分間で 20 問」など、時間制限ありの模擬試験形式）
 - ユーザーからのフィードバック機能（各問題に「この問題は不適切です」などのボタンを設置し、報告を受けられる）
 - 病理学などの医療系国家資格で共通科目の問題作成
-
----
-
-## ローカル環境での実行方法
-
-```bash
-git clone https://github.com/gakky525/my-portfolio.git
-cd my-portfolio
-npm install
-npm run dev
-```
